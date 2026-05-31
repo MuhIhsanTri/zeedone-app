@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zeedone — Belajar • Bayar • Belanja • Semua Jadi Mudah</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   ROOT & RESET
+═══════════════════════════════════════════════ */
+:root{
+  --navy:#1a2980;--blue:#2563eb;--blue2:#3b82f6;--teal:#0ea5e9;
+  --green:#22c55e;--green2:#16a34a;--light:#f0f7ff;
+  --white:#fff;--gray:#f8fafc;--text:#0f172a;--muted:#64748b;
+  --border:#e2e8f0;--nav-h:64px;
+  --fh:'Plus Jakarta Sans',sans-serif;--fb:'Nunito',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;font-family:var(--fb);background:#cbd5e1;color:var(--text)}
+#shell{max-width:430px;height:100dvh;margin:0 auto;background:var(--white);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 0 80px #0005}
+.screen{flex:1;overflow-y:auto;overflow-x:hidden;display:none;padding-bottom:12px}
+.screen.active{display:block}
+
+/* ─── SPLASH ─── */
+#s-splash{background:linear-gradient(155deg,#0f1f6e 0%,#1e40af 50%,#16a34a 100%);flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;gap:0}
+#s-splash.active{display:flex}
+.logo-area{display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:44px}
+.brand-big{font-family:var(--fh);font-size:42px;font-weight:900;letter-spacing:-1px}
+.brand-big .zee{color:#fff}.brand-big .done{color:#86efac}
+.tagline{font-size:12px;color:#93c5fd;letter-spacing:.6px;margin-top:4px}
+.card-login{width:100%;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.2);border-radius:22px;padding:26px 22px;backdrop-filter:blur(20px)}
+.card-login h2{color:#fff;font-family:var(--fh);font-size:22px;font-weight:700;margin-bottom:4px}
+.card-login p{color:#bfdbfe;font-size:13px;margin-bottom:22px}
+.fl{margin-bottom:13px}
+.fl label{display:block;color:#bfdbfe;font-size:11px;font-weight:700;letter-spacing:.5px;margin-bottom:5px}
+.fl input{width:100%;background:rgba(255,255,255,.13);border:1.5px solid rgba(255,255,255,.18);border-radius:11px;padding:12px 14px;color:#fff;font-size:14px;font-family:var(--fb);outline:none;transition:.2s}
+.fl input:focus{border-color:rgba(134,239,172,.6);background:rgba(255,255,255,.2)}
+.fl input::placeholder{color:rgba(255,255,255,.35)}
+.btn-primary{width:100%;background:linear-gradient(90deg,#22c55e,#16a34a);border:none;border-radius:11px;padding:13px;color:#fff;font-size:15px;font-weight:800;font-family:var(--fb);cursor:pointer;transition:.2s;margin-top:6px}
+.btn-primary:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn-primary:active{transform:scale(.98)}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.login-note{text-align:center;margin-top:14px;color:#bfdbfe;font-size:12px}
+.login-note a{color:#86efac;cursor:pointer;font-weight:700}
+.tab-bar{display:flex;gap:0;margin-bottom:18px}
+.tab{flex:1;padding:10px;text-align:center;color:#bfdbfe;font-size:13px;font-weight:700;cursor:pointer;border-bottom:2px solid rgba(255,255,255,.15);transition:.2s}
+.tab.on{color:#fff;border-bottom-color:#86efac}
+
+/* ─── TOP BAR ─── */
+.topbar{padding:14px 18px 10px;background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.topbar-row{display:flex;align-items:center;justify-content:space-between}
+.brand-sm{font-family:var(--fh);font-size:22px;font-weight:900;letter-spacing:-.5px}
+.brand-sm .zee{color:var(--navy)}.brand-sm .done{color:var(--green2)}
+.ib{width:36px;height:36px;border:none;background:var(--gray);border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--muted);transition:.15s;position:relative}
+.ib:hover{background:var(--border);color:var(--navy)}
+.badge-dot{position:absolute;top:5px;right:5px;width:8px;height:8px;background:#ef4444;border-radius:50%;border:1.5px solid var(--white)}
+.tbicons{display:flex;gap:4px}
+.greeting{font-size:13px;color:var(--muted);padding-top:2px}
+.greeting strong{color:var(--text);font-weight:800}
+
+/* ─── BOTTOM NAV ─── */
+#bnav{height:var(--nav-h);background:var(--white);border-top:1px solid var(--border);display:flex;align-items:stretch;padding:0 4px;flex-shrink:0}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;cursor:pointer;color:var(--muted);font-size:10px;font-family:var(--fb);font-weight:700;padding:6px 0;border-radius:10px;transition:.15s;position:relative}
+.ni .ico{font-size:20px}
+.ni.active{color:var(--navy)}
+.ni.active::after{content:'';position:absolute;top:6px;width:22px;height:3px;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:2px}
+
+/* ─── HERO CARD ─── */
+.hero-card{margin:14px;border-radius:20px;background:linear-gradient(135deg,var(--navy) 0%,#1e40af 55%,#155e75 100%);padding:22px 20px;color:#fff;position:relative;overflow:hidden}
+.hero-card::before{content:'';position:absolute;right:-20px;top:-20px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.06)}
+.hero-label{font-size:11px;font-weight:700;opacity:.7;letter-spacing:.5px;position:relative}
+.hero-balance{font-size:30px;font-weight:900;font-family:var(--fh);margin:4px 0 14px;position:relative}
+.hero-actions{display:flex;gap:8px;position:relative}
+.ha{flex:1;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:11px;padding:9px 6px;color:#fff;text-align:center;cursor:pointer;transition:.15s;font-size:11px;font-weight:700;font-family:var(--fb)}
+.ha .ico{font-size:17px;display:block;margin-bottom:2px}
+.ha:hover{background:rgba(255,255,255,.25)}
+.ha:active{transform:scale(.97)}
+
+/* ─── SECTIONS ─── */
+.sec-title{padding:18px 18px 8px;font-size:15px;font-weight:800;font-family:var(--fh);display:flex;align-items:center;justify-content:space-between}
+.sec-title a{font-size:12px;color:var(--blue);font-weight:700;cursor:pointer}
+
+/* ─── QUICK MENU ─── */
+.qgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 14px}
+.qi{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;padding:11px 5px;border-radius:14px;background:var(--gray);transition:.15s;border:1.5px solid transparent}
+.qi:hover{background:#e0f2fe;border-color:#bae6fd;transform:translateY(-1px)}
+.qi:active{transform:scale(.96)}
+.qi-ico{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px}
+.qi-lbl{font-size:10px;font-weight:800;text-align:center;line-height:1.2}
+
+/* ─── COURSE SCROLL ─── */
+.cscroll{display:flex;gap:12px;padding:0 14px 4px;overflow-x:auto;scroll-snap-type:x mandatory}
+.cscroll::-webkit-scrollbar{display:none}
+.ccard{min-width:172px;background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;scroll-snap-align:start;flex-shrink:0;cursor:pointer;transition:.2s}
+.ccard:hover{transform:translateY(-2px);box-shadow:0 6px 20px #1a298012}
+.cc-thumb{height:88px;display:flex;align-items:center;justify-content:center;font-size:32px}
+.cc-body{padding:10px 11px}
+.cc-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;margin-bottom:5px}
+.cc-title{font-size:12px;font-weight:800;line-height:1.3;margin-bottom:4px}
+.cc-meta{font-size:11px;color:var(--muted)}
+.cc-prog{height:3px;background:#e2e8f0;border-radius:2px;margin-top:7px;overflow:hidden}
+.cc-bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:2px}
+
+/* ─── ACTIVITY ─── */
+.alist{padding:0 14px}
+.ai{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}
+.ai:last-child{border-bottom:none}
+.ai-ico{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.ai-info{flex:1}
+.ai-title{font-size:13px;font-weight:700}
+.ai-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.ai-amt{font-size:13px;font-weight:800}
+.plus{color:var(--green2)}.minus{color:#ef4444}
+
+/* ─── SEARCH ─── */
+.sbar{margin:10px 14px;background:var(--gray);border:1.5px solid var(--border);border-radius:13px;padding:11px 14px;display:flex;align-items:center;gap:9px}
+.sbar input{flex:1;border:none;background:none;font-size:13px;font-family:var(--fb);outline:none;color:var(--text)}
+.sbar input::placeholder{color:var(--muted)}
+
+/* ─── PILLS ─── */
+.pills{display:flex;gap:7px;padding:0 14px;overflow-x:auto}
+.pills::-webkit-scrollbar{display:none}
+.pill{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;background:var(--white);color:var(--muted);transition:.15s;flex-shrink:0}
+.pill.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.pill:hover:not(.on){background:var(--light);border-color:var(--blue2)}
+
+/* ─── BELAJAR TABS ─── */
+.belajar-tabs{display:flex;gap:0;margin:10px 14px;background:var(--gray);border-radius:12px;padding:4px}
+.btab{flex:1;padding:8px;text-align:center;font-size:12px;font-weight:800;border-radius:9px;cursor:pointer;color:var(--muted);transition:.2s}
+.btab.on{background:var(--navy);color:#fff;box-shadow:0 2px 8px #1a298030}
+
+/* ─── COURSE GRID ─── */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px 14px}
+.cgc{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:.2s}
+.cgc:hover{transform:translateY(-2px);box-shadow:0 6px 20px #0001}
+.cgc-th{height:84px;display:flex;align-items:center;justify-content:center;font-size:30px}
+.cgc-b{padding:9px 10px}
+.cgc-subj{font-size:10px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px}
+.cgc-name{font-size:12px;font-weight:800;line-height:1.3;margin-bottom:5px}
+.cgc-foot{display:flex;align-items:center;justify-content:space-between}
+.price{font-size:13px;font-weight:900;color:var(--green2)}
+.rating{font-size:11px;color:var(--muted)}
+
+/* ─── VIDEO BELAJAR LIST ─── */
+.video-section{padding:0 14px}
+.vsubj-card{background:var(--white);border:1px solid var(--border);border-radius:16px;margin-bottom:12px;overflow:hidden}
+.vsubj-head{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:.15s}
+.vsubj-head:hover{background:var(--gray)}
+.vsubj-title{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px}
+.vsubj-count{font-size:11px;color:var(--muted)}
+.vsubj-arrow{font-size:12px;color:var(--muted);transition:.3s}
+.vsubj-card.open .vsubj-arrow{transform:rotate(180deg)}
+.vbab-list{display:none;border-top:1px solid var(--border)}
+.vsubj-card.open .vbab-list{display:block}
+.vbab-item{padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:.15s}
+.vbab-item:last-child{border-bottom:none}
+.vbab-item:hover{background:var(--light)}
+.vbab-title{font-size:12px;font-weight:700;margin-bottom:2px;display:flex;align-items:center;gap:6px}
+.vbab-count{font-size:11px;color:var(--muted)}
+.level-badge{font-size:9px;font-weight:800;padding:1px 6px;border-radius:4px}
+.level-Dasar{background:#dcfce7;color:#15803d}
+.level-Menengah{background:#dbeafe;color:#1d4ed8}
+.level-Lanjut{background:#fce7f3;color:#9d174d}
+
+/* ─── KELAS PILLS (Kelas 10/11/12) ─── */
+.kelas-pills{display:flex;gap:6px;padding:0 14px;margin-bottom:10px}
+.kpill{padding:5px 12px;border-radius:16px;border:1.5px solid var(--border);font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;background:var(--white);color:var(--muted);transition:.15s}
+.kpill.on{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* ─── WALLET ─── */
+.w-hero{margin:14px;border-radius:20px;background:linear-gradient(135deg,#064e3b,#065f46,#16a34a);padding:22px 20px;color:#fff;position:relative;overflow:hidden}
+.w-hero::before{content:'';position:absolute;right:-20px;top:-20px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.06)}
+.wh-lbl{font-size:11px;opacity:.7;font-weight:700;letter-spacing:.4px}
+.wh-bal{font-size:32px;font-weight:900;font-family:var(--fh);margin:3px 0 3px}
+.wh-sub{font-size:11px;opacity:.5;margin-bottom:18px}
+.w-actions{display:flex;gap:8px}
+.wa{flex:1;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);border-radius:11px;padding:9px 6px;text-align:center;cursor:pointer;font-size:11px;font-weight:700;font-family:var(--fb);color:#fff;transition:.15s}
+.wa .ico{font-size:19px;display:block;margin-bottom:2px}
+.wa:hover{background:rgba(255,255,255,.25)}
+.trx{padding:11px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;transition:.12s}
+.trx:hover{background:var(--gray)}
+.trx-ico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.trx-info{flex:1}
+.trx-name{font-size:13px;font-weight:700}
+.trx-date{font-size:11px;color:var(--muted);margin-top:1px}
+.trx-amt{font-size:13px;font-weight:800}
+
+/* ─── SHOP ─── */
+.shop-banner{margin:10px 14px;background:linear-gradient(120deg,#1e3a8a,#2563eb);border-radius:16px;padding:16px 18px;color:#fff;display:flex;align-items:center;justify-content:space-between}
+.sb-text h3{font-family:var(--fh);font-size:16px;font-weight:800}
+.sb-text p{font-size:11px;opacity:.75;margin-top:2px}
+.sb-btn{background:rgba(255,255,255,.2);border-radius:9px;padding:7px 12px;font-size:11px;font-weight:800;border:1px solid rgba(255,255,255,.3);cursor:pointer;color:#fff;transition:.2s}
+.sb-btn:hover{background:rgba(255,255,255,.3)}
+
+/* ─── SHOP PLATFORM TABS ─── */
+.platform-tabs{display:flex;gap:8px;padding:0 14px;margin-bottom:12px}
+.ptab{flex:1;padding:9px;border-radius:11px;border:2px solid var(--border);background:var(--white);font-size:12px;font-weight:800;cursor:pointer;text-align:center;transition:.2s;color:var(--muted)}
+.ptab.on.shopee{border-color:#f97316;background:#fff7ed;color:#c2410c}
+.ptab.on.tokped{border-color:#22c55e;background:#dcfce7;color:#15803d}
+.ptab:hover:not(.on){background:var(--gray)}
+
+/* ─── BOOK GRID ─── */
+.bgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 14px 12px}
+.bcard{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;transition:.2s}
+.bcard:hover{transform:translateY(-2px);box-shadow:0 6px 20px #0002}
+.bcard-img{height:110px;display:flex;align-items:center;justify-content:center;font-size:42px;background:var(--gray);position:relative}
+.bcard-platform{position:absolute;top:6px;right:6px;font-size:9px;font-weight:800;padding:2px 6px;border-radius:5px}
+.bcard-platform.shopee{background:#f97316;color:#fff}
+.bcard-platform.tokped{background:#22c55e;color:#fff}
+.bcard-body{padding:10px 12px}
+.bcard-title{font-size:12px;font-weight:800;line-height:1.3;margin-bottom:3px}
+.bcard-subject{font-size:10px;color:var(--blue);font-weight:700;margin-bottom:5px}
+.bcard-price{font-size:13px;font-weight:900;color:var(--navy);margin-bottom:6px}
+.bcard-btns{display:flex;gap:5px}
+.bbtn{flex:1;padding:6px 4px;border-radius:8px;border:none;font-size:10px;font-weight:800;cursor:pointer;font-family:var(--fb);transition:.15s;display:flex;align-items:center;justify-content:center;gap:3px}
+.bbtn.shopee{background:#fff7ed;color:#c2410c;border:1.5px solid #f97316}
+.bbtn.shopee:hover{background:#f97316;color:#fff}
+.bbtn.tokped{background:#dcfce7;color:#15803d;border:1.5px solid #22c55e}
+.bbtn.tokped:hover{background:#22c55e;color:#fff}
+
+/* ─── GAMES ─── */
+.game-hero{margin:12px 14px;border-radius:18px;background:linear-gradient(135deg,#4c1d95,#7c3aed);padding:20px 18px;color:#fff}
+.gh-title{font-family:var(--fh);font-size:20px;font-weight:800;margin-bottom:3px}
+.gh-sub{font-size:12px;opacity:.8;margin-bottom:14px}
+.lb{background:rgba(255,255,255,.12);border-radius:12px;padding:10px;border:1px solid rgba(255,255,255,.14)}
+.lb-row{display:flex;align-items:center;gap:8px;padding:5px 0}
+.lb-rank{font-size:15px;font-weight:900;width:22px;text-align:center}
+.lb-av{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.lb-name{flex:1;font-size:12px;font-weight:700}
+.lb-pts{font-size:12px;font-weight:900;color:#fde68a}
+.gcards{display:grid;grid-template-columns:1fr 1fr;gap:11px;padding:12px 14px}
+.gc{border-radius:16px;padding:18px 14px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.gc:hover{transform:translateY(-3px);filter:brightness(1.07)}
+.gc:active{transform:scale(.97)}
+.gc-badge{position:absolute;top:9px;right:9px;font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;background:rgba(255,255,255,.25);color:#fff}
+.gc-ico{font-size:28px;margin-bottom:7px}
+.gc-name{font-size:14px;font-weight:900;color:#fff;margin-bottom:2px}
+.gc-desc{font-size:10px;color:rgba(255,255,255,.7)}
+.gc-players{font-size:10px;color:rgba(255,255,255,.55);margin-top:6px}
+
+/* ─── TUTOR ─── */
+.t-search{margin:10px 14px;background:linear-gradient(135deg,#0c4a6e,#0369a1);border-radius:16px;padding:16px 18px;color:#fff}
+.ts-title{font-family:var(--fh);font-size:16px;font-weight:800;margin-bottom:10px}
+.ts-pills{display:flex;gap:7px;flex-wrap:wrap}
+.tsp{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:18px;padding:5px 12px;font-size:11px;font-weight:700;color:#fff;cursor:pointer;transition:.15s}
+.tsp.on,.tsp:hover{background:rgba(255,255,255,.3)}
+.tlist{padding:0 14px}
+.tc{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:10px;display:flex;gap:12px;cursor:pointer;transition:.2s}
+.tc:hover{box-shadow:0 5px 20px #0001;transform:translateY(-1px)}
+.tc-av{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.tc-info{flex:1}
+.tc-name{font-size:14px;font-weight:800;margin-bottom:2px}
+.tc-subj{font-size:11px;color:var(--blue);font-weight:700;margin-bottom:3px}
+.tc-meta{display:flex;gap:10px;font-size:11px;color:var(--muted)}
+.tc-rate{font-size:14px;font-weight:900;color:var(--green2);margin-top:5px}
+.tc-btns{display:flex;gap:7px;margin-top:8px}
+.tcb{flex:1;padding:7px;border-radius:9px;border:none;font-size:11px;font-weight:800;font-family:var(--fb);cursor:pointer;transition:.15s}
+.tcb.p{background:var(--navy);color:#fff}
+.tcb.p:hover{background:var(--blue)}
+.tcb.s{background:var(--gray);color:var(--text);border:1px solid var(--border)}
+
+/* ─── VIDEO PLAYER MODAL ─── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:.25s}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{width:100%;max-width:430px;background:var(--white);border-radius:22px 22px 0 0;padding:24px 22px 32px;transform:translateY(40px);transition:.3s;max-height:90vh;overflow-y:auto}
+.overlay.open .modal{transform:translateY(0)}
+.modal-title{font-family:var(--fh);font-size:18px;font-weight:800;margin-bottom:6px}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+.modal-close{position:absolute;top:18px;right:18px;width:32px;height:32px;border:none;background:var(--gray);border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;color:var(--muted);z-index:2}
+.modal-close:hover{background:var(--border)}
+.form-row{margin-bottom:14px}
+.form-row label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+.form-row input,.form-row select{width:100%;background:var(--gray);border:1.5px solid var(--border);border-radius:10px;padding:11px 13px;font-size:14px;font-family:var(--fb);outline:none;transition:.2s;color:var(--text)}
+.form-row input:focus,.form-row select:focus{border-color:var(--blue);background:var(--white)}
+
+/* ─── VIDEO PLAYER ─── */
+.yt-player-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:14px;margin-bottom:14px;background:#000}
+.yt-player-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;border-radius:14px}
+.video-list-scroll{max-height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
+.video-list-scroll::-webkit-scrollbar{width:4px}
+.video-list-scroll::-webkit-scrollbar-track{background:var(--gray)}
+.video-list-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.vli{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:11px;cursor:pointer;border:1.5px solid transparent;transition:.15s}
+.vli:hover,.vli.active{background:var(--light);border-color:var(--blue2)}
+.vli-num{width:26px;height:26px;border-radius:7px;background:var(--gray);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--navy);flex-shrink:0}
+.vli.active .vli-num{background:var(--navy);color:#fff}
+.vli-info{flex:1}
+.vli-title{font-size:12px;font-weight:700;line-height:1.3}
+.vli-meta{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* ─── BOOK DETAIL MODAL ─── */
+.book-detail-img{width:80px;height:100px;border-radius:10px;background:var(--gray);display:flex;align-items:center;justify-content:center;font-size:40px;flex-shrink:0}
+.book-detail-head{display:flex;gap:14px;margin-bottom:18px}
+.book-detail-info{flex:1}
+.book-detail-title{font-size:16px;font-weight:800;margin-bottom:4px}
+.book-detail-subj{font-size:12px;color:var(--blue);font-weight:700;margin-bottom:6px}
+.book-detail-price{font-size:20px;font-weight:900;color:var(--navy);margin-bottom:4px}
+.book-detail-stars{font-size:12px;color:var(--muted)}
+.book-detail-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:20px;background:var(--gray);padding:12px;border-radius:10px}
+.book-platform-btns{display:flex;flex-direction:column;gap:10px}
+.bpbtn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:13px;border:none;font-size:14px;font-weight:800;cursor:pointer;font-family:var(--fb);transition:.2s;text-decoration:none}
+.bpbtn.shopee{background:linear-gradient(90deg,#f97316,#ea580c);color:#fff}
+.bpbtn.shopee:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.bpbtn.tokped{background:linear-gradient(90deg,#22c55e,#16a34a);color:#fff}
+.bpbtn.tokped:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.bpbtn-note{font-size:11px;opacity:.8;font-weight:600}
+
+/* ─── TOAST ─── */
+.toast{position:fixed;bottom:78px;left:50%;transform:translateX(-50%) translateY(16px);background:#0f172a;color:#fff;padding:9px 18px;border-radius:11px;font-size:13px;font-weight:700;z-index:200;opacity:0;transition:.3s;pointer-events:none;white-space:nowrap;max-width:320px;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ─── SKELETON / LOADING ─── */
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.skeleton{background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:8px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ─── BADGES ─── */
+.b-new{background:#dcfce7;color:#15803d;font-size:9px;font-weight:800;padding:2px 6px;border-radius:5px}
+.b-hot{background:#fee2e2;color:#b91c1c;font-size:9px;font-weight:800;padding:2px 6px;border-radius:5px}
+.b-pop{background:#dbeafe;color:#1d4ed8;font-size:9px;font-weight:800;padding:2px 6px;border-radius:5px}
+
+/* ─── QUIZ ─── */
+.quiz-wrap{padding:16px}
+.quiz-progress{height:4px;background:var(--border);border-radius:2px;margin-bottom:16px;overflow:hidden}
+.quiz-prog-bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:2px;transition:.3s}
+.quiz-q{font-size:16px;font-weight:800;line-height:1.4;margin-bottom:18px;color:var(--text)}
+.quiz-opts{display:flex;flex-direction:column;gap:9px}
+.qopt{padding:13px 16px;border-radius:12px;border:2px solid var(--border);background:var(--white);font-size:14px;font-weight:700;cursor:pointer;transition:.2s;text-align:left;font-family:var(--fb)}
+.qopt:hover:not(:disabled){background:var(--light);border-color:var(--blue2)}
+.qopt.correct{background:#dcfce7;border-color:var(--green2);color:var(--green2)}
+.qopt.wrong{background:#fee2e2;border-color:#ef4444;color:#ef4444}
+.qopt:disabled{cursor:not-allowed}
+.quiz-timer{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.timer-bar{flex:1;height:6px;background:var(--border);border-radius:3px;margin-left:10px;overflow:hidden}
+.timer-fill{height:100%;background:var(--green);border-radius:3px;transition:.5s linear}
+.result-card{background:var(--navy);border-radius:18px;padding:24px;text-align:center;color:#fff;margin-bottom:16px}
+.result-score{font-size:56px;font-weight:900;font-family:var(--fh)}
+.result-label{font-size:13px;opacity:.7;margin-top:4px}
+.result-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:16px 0}
+.rstat{background:rgba(255,255,255,.12);border-radius:11px;padding:10px}
+.rstat-val{font-size:20px;font-weight:900;font-family:var(--fh)}
+.rstat-lbl{font-size:10px;opacity:.7;margin-top:2px}
+
+@media(min-width:431px){#shell{border-left:1px solid var(--border);border-right:1px solid var(--border)}}
+</style>
+</head>
+<body>
+<div id="shell">
+
+<div class="screen active" id="s-splash">
+  <div class="logo-area">
+    <svg width="88" viewBox="0 0 200 200" fill="none">
+      <defs><linearGradient id="zg" x1="30" y1="20" x2="170" y2="180"><stop offset="0%" stop-color="#1e3a8a"/><stop offset="55%" stop-color="#2563eb"/><stop offset="100%" stop-color="#22c55e"/></linearGradient></defs>
+      <path d="M30 30L150 30L150 55L75 130L160 130L160 170L30 170L30 145L110 70L30 70Z" fill="url(#zg)"/>
+      <circle cx="130" cy="30" r="28" fill="#1e3a8a"/>
+      <path d="M118 22L142 22L128 36L142 36" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <rect x="118" y="12" width="24" height="3" rx="1.5" fill="#fbbf24"/>
+      <path d="M130 10L130 12M122 12L120 10M138 12L140 10" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <div>
+      <div class="brand-big"><span class="zee">zee</span><span class="done">done</span></div>
+      <div class="tagline">Belajar • Bayar • Belanja • Semua Jadi Mudah</div>
+    </div>
+  </div>
+  <div class="card-login">
+    <div class="tab-bar">
+      <div class="tab on" id="tab-login" onclick="switchTab('login')">Masuk</div>
+      <div class="tab" id="tab-reg" onclick="switchTab('reg')">Daftar</div>
+    </div>
+    <div id="form-login">
+      <div class="fl"><label>EMAIL</label><input type="email" id="l-email" placeholder="demo@zeedone.id"></div>
+      <div class="fl"><label>PASSWORD</label><input type="password" id="l-pass" placeholder="zeedone123"></div>
+      <button class="btn-primary" id="btn-login" onclick="doLogin()">Masuk Sekarang</button>
+      <div class="login-note">Demo: demo@zeedone.id / zeedone123</div>
+    </div>
+    <div id="form-reg" style="display:none">
+      <div class="fl"><label>NAMA LENGKAP</label><input type="text" id="r-name" placeholder="Nama kamu"></div>
+      <div class="fl"><label>EMAIL</label><input type="email" id="r-email" placeholder="email@kamu.com"></div>
+      <div class="fl"><label>NOMOR HP</label><input type="tel" id="r-phone" placeholder="+62..."></div>
+      <div class="fl"><label>PASSWORD</label><input type="password" id="r-pass" placeholder="Min. 6 karakter"></div>
+      <button class="btn-primary" id="btn-reg" onclick="doRegister()">Daftar Sekarang</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="s-home">
+  <div class="topbar">
+    <div class="topbar-row">
+      <div class="brand-sm"><span class="zee">zee</span><span class="done">done</span></div>
+      <div class="tbicons">
+        <button class="ib" onclick="openNotifications()">🔔<span class="badge-dot" id="notif-dot" style="display:none"></span></button>
+        <button class="ib" onclick="if(confirm('Keluar dari aplikasi Zeedone?')) doLogout()">🚪</button>
+      </div>
+    </div>
+    <div class="greeting">Halo, <strong id="home-name">...</strong> 👋</div>
+  </div>
+
+  <div class="hero-card">
+    <div class="hero-label">SALDO E-WALLET</div>
+    <div class="hero-balance" id="home-balance">Memuat...</div>
+    <div class="hero-actions">
+      <div class="ha" onclick="openTopup()"><span class="ico">💳</span>Top Up</div>
+      <div class="ha" onclick="openTransfer()"><span class="ico">↗️</span>Transfer</div>
+      <div class="ha" onclick="navTo('wallet')"><span class="ico">🏦</span>Riwayat</div>
+      <div class="ha" onclick="navTo('wallet')"><span class="ico">📋</span>Detail</div>
+    </div>
+  </div>
+
+  <div class="sec-title">Menu Utama</div>
+  <div class="qgrid">
+    <div class="qi" onclick="navTo('belajar')"><div class="qi-ico" style="background:#dbeafe">📚</div><div class="qi-lbl">Belajar Online</div></div>
+    <div class="qi" onclick="navTo('wallet')"><div class="qi-ico" style="background:#dcfce7">💰</div><div class="qi-lbl">E-Wallet</div></div>
+    <div class="qi" onclick="navTo('shop')"><div class="qi-ico" style="background:#ccfbf1">🛒</div><div class="qi-lbl">Belanja Buku</div></div>
+    <div class="qi" onclick="navTo('tutor')"><div class="qi-ico" style="background:#ede9fe">👨‍🏫</div><div class="qi-lbl">Cari Tutor</div></div>
+    <div class="qi" onclick="navTo('games')"><div class="qi-ico" style="background:#ffedd5">🎮</div><div class="qi-lbl">Mini Games</div></div>
+    <div class="qi" onclick="toast('💬 Chat segera hadir!')"><div class="qi-ico" style="background:#fce7f3">💬</div><div class="qi-lbl">Chat</div></div>
+    <div class="qi" onclick="toast('📝 Tes Minat segera hadir!')"><div class="qi-ico" style="background:#fef9c3">📝</div><div class="qi-lbl">Tes Minat</div></div>
+    <div class="qi" onclick="toast('🎁 Voucher & Reward!')"><div class="qi-ico" style="background:#e0e7ff">🎁</div><div class="qi-lbl">Voucher</div></div>
+  </div>
+
+  <div class="sec-title">Kelas Populer <a onclick="navTo('belajar')">Semua →</a></div>
+  <div class="cscroll" id="home-courses">
+    <div style="padding:20px;color:var(--muted);font-size:13px">Memuat kelas...</div>
+  </div>
+
+  <div class="sec-title">Aktivitas Terkini</div>
+  <div class="alist" id="home-activity">
+    <div style="padding:16px;color:var(--muted);font-size:13px">Memuat...</div>
+  </div>
+</div>
+
+<div class="screen" id="s-belajar">
+  <div class="topbar">
+    <div class="topbar-row">
+      <div style="font-family:var(--fh);font-size:19px;font-weight:800">📚 Belajar Online</div>
+      <button class="ib" onclick="navTo('belajar')">🔄</button>
+    </div>
+  </div>
+
+  <div class="belajar-tabs">
+    <div class="btab on" id="btab-premium" onclick="switchBelajarTab('premium')">🎓 Kursus Premium</div>
+    <div class="btab" id="btab-video" onclick="switchBelajarTab('video')">▶️ Video Gratis</div>
+  </div>
+
+  <div id="panel-premium">
+    <div class="sbar"><span>🔍</span><input id="course-search" type="text" placeholder="Cari kelas, topik..." oninput="debounceSearch()"></div>
+    <div class="pills" id="course-pills">
+      <div class="pill on" onclick="filterCourse(this,'')">Semua</div>
+      <div class="pill" onclick="filterCourse(this,'Matematika')">Matematika</div>
+      <div class="pill" onclick="filterCourse(this,'Fisika')">Fisika</div>
+      <div class="pill" onclick="filterCourse(this,'Kimia')">Kimia</div>
+      <div class="pill" onclick="filterCourse(this,'Biologi')">Biologi</div>
+      <div class="pill" onclick="filterCourse(this,'Bahasa')">Bahasa</div>
+      <div class="pill" onclick="filterCourse(this,'Teknologi')">Teknologi</div>
+    </div>
+    <div class="cgrid" id="course-grid">
+      <div class="skeleton" style="height:160px;border-radius:14px"></div>
+      <div class="skeleton" style="height:160px;border-radius:14px"></div>
+      <div class="skeleton" style="height:160px;border-radius:14px"></div>
+      <div class="skeleton" style="height:160px;border-radius:14px"></div>
+    </div>
+  </div>
+
+  <div id="panel-video" style="display:none">
+    <div class="sbar"><span>🔍</span><input id="video-search" type="text" placeholder="Cari mata pelajaran..." oninput="filterVideoSubjects()"></div>
+    <div class="kelas-pills" id="kelas-pills">
+      <div class="kpill on" onclick="filterKelas(this,'Kelas 10')">Kelas 10</div>
+      <div class="kpill" onclick="filterKelas(this,'Kelas 11')">Kelas 11</div>
+      <div class="kpill" onclick="filterKelas(this,'Kelas 12')">Kelas 12</div>
+      <div class="kpill" onclick="filterKelas(this,'TOEFL/IELTS')">TOEFL/IELTS</div>
+    </div>
+    <div class="video-section" id="video-subject-list">
+      </div>
+  </div>
+</div>
+
+<div class="screen" id="s-wallet">
+  <div class="topbar">
+    <div class="topbar-row">
+      <div style="font-family:var(--fh);font-size:19px;font-weight:800">💰 E-Wallet</div>
+      <button class="ib" onclick="loadWallet()">🔄</button>
+    </div>
+  </div>
+  <div class="w-hero">
+    <div class="wh-lbl">SALDO ZEEDONE</div>
+    <div class="wh-bal" id="wallet-balance">Memuat...</div>
+    <div class="wh-sub" id="wallet-update">-</div>
+    <div class="w-actions">
+      <div class="wa" onclick="openTopup()"><span class="ico">➕</span>Top Up</div>
+      <div class="wa" onclick="openTransfer()"><span class="ico">↗️</span>Transfer</div>
+      <div class="wa" onclick="openWithdraw()"><span class="ico">🏦</span>Tarik</div>
+      <div class="wa" onclick="toast('Scan QR Code!')"><span class="ico">📷</span>Scan QR</div>
+    </div>
+  </div>
+  <div class="sec-title">Riwayat Transaksi</div>
+  <div id="wallet-trx"><div style="padding:20px;color:var(--muted);font-size:13px">Memuat...</div></div>
+</div>
+
+<div class="screen" id="s-shop">
+  <div class="topbar">
+    <div class="topbar-row">
+      <div style="font-family:var(--fh);font-size:19px;font-weight:800">🛒 Belanja Buku</div>
+      <button class="ib" onclick="toast('🔍 Cari buku di bawah!')">🔍</button>
+    </div>
+  </div>
+  <div class="sbar"><span>🔍</span><input type="text" id="book-search" placeholder="Cari buku, e-book, modul..." oninput="filterBooks()"></div>
+
+  <div class="shop-banner">
+    <div class="sb-text"><h3>📦 Langsung ke Marketplace!</h3><p>Temukan buku terbaik di Shopee & Tokopedia</p></div>
+    <div class="sb-btn" onclick="toast('Cari promo di Shopee atau Tokopedia!')">PROMO</div>
+  </div>
+
+  <div style="padding:0 14px;margin-bottom:4px;font-size:11px;font-weight:700;color:var(--muted)">Buka di:</div>
+  <div class="platform-tabs">
+    <div class="ptab on shopee" id="ptab-shopee" onclick="setShopPlatform('shopee')">🟠 Shopee</div>
+    <div class="ptab tokped" id="ptab-tokped" onclick="setShopPlatform('tokped')">🟢 Tokopedia</div>
+    <div class="ptab" id="ptab-both" onclick="setShopPlatform('both')" style="flex:.8">Keduanya</div>
+  </div>
+
+  <div class="pills" style="margin:8px 0 12px" id="book-pills">
+    <div class="pill on" onclick="filterBookCat(this,'')">Semua</div>
+    <div class="pill" onclick="filterBookCat(this,'UTBK/SNBT')">UTBK/SNBT</div>
+    <div class="pill" onclick="filterBookCat(this,'Matematika')">Matematika</div>
+    <div class="pill" onclick="filterBookCat(this,'Fisika')">Fisika</div>
+    <div class="pill" onclick="filterBookCat(this,'Kimia')">Kimia</div>
+    <div class="pill" onclick="filterBookCat(this,'Biologi')">Biologi</div>
+    <div class="pill" onclick="filterBookCat(this,'Bahasa Inggris')">Bhs. Inggris</div>
+    <div class="pill" onclick="filterBookCat(this,'Ekonomi')">Ekonomi</div>
+  </div>
+
+  <div class="bgrid" id="book-grid">
+    </div>
+</div>
+
+<div class="screen" id="s-games">
+  <div class="topbar">
+    <div class="topbar-row">
+      <div style="font-family:var(--fh);font-size:19px;font-weight:800">🎮 Mini Games</div>
+      <button class="ib">🏆 <span id="user-points">0</span></button>
+    </div>
+  </div>
+  <div class="game-hero">
+    <div class="gh-title">🏆 Papan Peringkat</div>
+    <div class="gh-sub">Menangkan Voucher Rp 100.000 minggu ini!</div>
+    <div class="lb" id="leaderboard-list">
+      <div style="color:rgba(255,255,255,.6);font-size:12px;text-align:center;padding:8px">Memuat...</div>
+    </div>
+  </div>
+  <div class="gcards" id="game-cards">
+    <div class="skeleton" style="height:140px;border-radius:16px"></div>
+    <div class="skeleton" style="height:140px;border-radius:16px"></div>
+    <div class="skeleton" style="height:140px;border-radius:16px"></div>
+    <div class="skeleton" style="height:140px;border-radius:16px"></div>
+  </div>
+</div>
+
+<div class="screen" id="s-tutor">
+  <div class="topbar">
+    <div class="topbar-row">
+      <div style="font-family:var(--fh);font-size:19px;font-weight:800">👨‍🏫 Cari Tutor</div>
+      <button class="ib" onclick="navTo('tutor')">🔄</button>
+    </div>
+  </div>
+  <div class="t-search">
+    <div class="ts-title">Temukan Tutor Terbaik</div>
+    <div class="ts-pills">
+      <div class="tsp on" onclick="filterTutor(this,'')">Semua</div>
+      <div class="tsp" onclick="filterTutor(this,'Matematika')">Matematika</div>
+      <div class="tsp" onclick="filterTutor(this,'Fisika')">Fisika</div>
+      <div class="tsp" onclick="filterTutor(this,'Kimia')">Kimia</div>
+      <div class="tsp" onclick="filterTutor(this,'Bahasa Inggris')">Bahasa Inggris</div>
+    </div>
+  </div>
+  <div class="tlist" id="tutor-list">
+    <div class="skeleton" style="height:140px;border-radius:16px;margin-bottom:10px"></div>
+    <div class="skeleton" style="height:140px;border-radius:16px;margin-bottom:10px"></div>
+    <div class="skeleton" style="height:140px;border-radius:16px"></div>
+  </div>
+</div>
+
+<div class="overlay" id="modal-topup">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-topup')">✕</button>
+    <div class="modal-title">Top Up E-Wallet 💳</div>
+    <div class="modal-sub">Tambah saldo untuk mulai berbelanja & belajar</div>
+    <div class="form-row"><label>JUMLAH TOP UP</label>
+      <select id="topup-amount">
+        <option value="20000">Rp 20.000</option>
+        <option value="50000" selected>Rp 50.000</option>
+        <option value="100000">Rp 100.000</option>
+        <option value="200000">Rp 200.000</option>
+        <option value="500000">Rp 500.000</option>
+        <option value="1000000">Rp 1.000.000</option>
+      </select>
+    </div>
+    <div class="form-row"><label>METODE PEMBAYARAN</label>
+      <select id="topup-method">
+        <option>Transfer BCA</option><option>Transfer Mandiri</option>
+        <option>Transfer BRI</option><option>Transfer BNI</option>
+        <option>GoPay</option><option>OVO</option><option>DANA</option>
+      </select>
+    </div>
+    <button class="btn-primary" style="background:linear-gradient(90deg,#16a34a,#15803d)" onclick="doTopup()">Konfirmasi Top Up</button>
+  </div>
+</div>
+
+<div class="overlay" id="modal-transfer">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-transfer')">✕</button>
+    <div class="modal-title">Transfer Saldo ↗️</div>
+    <div class="modal-sub">Kirim saldo ke pengguna Zeedone lain</div>
+    <div class="form-row"><label>EMAIL PENERIMA</label><input type="email" id="tf-email" placeholder="email@zeedone.id"></div>
+    <div class="form-row"><label>JUMLAH TRANSFER</label><input type="number" id="tf-amount" placeholder="10000" min="1000"></div>
+    <div class="form-row"><label>CATATAN (opsional)</label><input type="text" id="tf-note" placeholder="Buat apa?"></div>
+    <button class="btn-primary" style="background:linear-gradient(90deg,var(--navy),var(--blue))" onclick="doTransfer()">Kirim Sekarang</button>
+  </div>
+</div>
+
+<div class="overlay" id="modal-withdraw">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-withdraw')">✕</button>
+    <div class="modal-title">Tarik Tunai 🏦</div>
+    <div class="modal-sub">Cairkan saldo ke rekening bank kamu</div>
+    <div class="form-row"><label>JUMLAH TARIK</label><input type="number" id="wd-amount" placeholder="50000" min="50000"></div>
+    <div class="form-row"><label>NAMA BANK</label><input type="text" id="wd-bank" placeholder="BCA / Mandiri / BRI..."></div>
+    <div class="form-row"><label>NOMOR REKENING</label><input type="text" id="wd-acc" placeholder="1234567890"></div>
+    <div class="form-row"><label>ATAS NAMA</label><input type="text" id="wd-name" placeholder="Nama pemilik rekening"></div>
+    <button class="btn-primary" style="background:linear-gradient(90deg,#065f46,#16a34a)" onclick="doWithdraw()">Ajukan Penarikan</button>
+  </div>
+</div>
+
+<div class="overlay" id="modal-booking">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-booking')">✕</button>
+    <div class="modal-title" id="booking-title">Booking Tutor 👨‍🏫</div>
+    <div class="modal-sub" id="booking-sub">Isi jadwal sesi belajarmu</div>
+    <input type="hidden" id="booking-tutor-id">
+    <div class="form-row"><label>MATA PELAJARAN</label><input type="text" id="bk-subject" placeholder="Matematika, Fisika..."></div>
+    <div class="form-row"><label>JADWAL SESI</label><input type="datetime-local" id="bk-date"></div>
+    <div class="form-row"><label>DURASI</label>
+      <select id="bk-dur">
+        <option value="60">1 Jam</option>
+        <option value="90">1,5 Jam</option>
+        <option value="120">2 Jam</option>
+        <option value="180">3 Jam</option>
+      </select>
+    </div>
+    <div class="form-row"><label>MODE BELAJAR</label>
+      <select id="bk-mode">
+        <option value="online">Online (Video Call)</option>
+        <option value="offline">Offline (Tatap Muka)</option>
+      </select>
+    </div>
+    <div class="form-row"><label>CATATAN</label><input type="text" id="bk-note" placeholder="Materi spesifik, pertanyaan, dll."></div>
+    <div style="background:var(--light);border-radius:10px;padding:12px;margin-bottom:14px;font-size:13px;font-weight:700;color:var(--navy)" id="booking-price-preview">Total: -</div>
+    <button class="btn-primary" style="background:linear-gradient(90deg,var(--navy),var(--blue))" onclick="doBooking()">Konfirmasi Booking</button>
+  </div>
+</div>
+
+<div class="overlay" id="modal-video">
+  <div class="modal" id="video-modal-content">
+    </div>
+</div>
+
+<div class="overlay" id="modal-book">
+  <div class="modal" id="book-modal-content">
+    </div>
+</div>
+
+<div class="overlay" id="modal-quiz">
+  <div class="modal" id="quiz-content"></div>
+</div>
+
+<div class="overlay" id="modal-notif">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-notif')">✕</button>
+    <div class="modal-title">Notifikasi 🔔</div>
+    <div id="notif-list" style="margin-top:12px"></div>
+    <button class="btn-primary" style="background:var(--gray);color:var(--text);margin-top:12px" onclick="markAllRead()">Tandai Semua Dibaca</button>
+  </div>
+</div>
+
+<nav id="bnav" style="display:none;">
+  <button class="ni active" id="nav-home" onclick="navTo('home')"><span class="ico">🏠</span>Beranda</button>
+  <button class="ni" id="nav-belajar" onclick="navTo('belajar')"><span class="ico">📚</span>Belajar</button>
+  <button class="ni" id="nav-shop" onclick="navTo('shop')"><span class="ico">🛒</span>Belanja</button>
+  <button class="ni" id="nav-games" onclick="navTo('games')"><span class="ico">🎮</span>Games</button>
+  <button class="ni" id="nav-tutor" onclick="navTo('tutor')"><span class="ico">👨‍🏫</span>Tutor</button>
+</nav>
+
+<div class="toast" id="toast-el"></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════
+const API = ''; // Biarkan kosong agar otomatis menyambung ke localhost backend Anda
+const DEMO_MODE = false; // HARUS FALSE agar menyambung ke server Node.js sungguhan
+
+let token = localStorage.getItem('zd_token') || '';
+let user = JSON.parse(localStorage.getItem('zd_user') || 'null');
+let currentBelajarTab = 'premium';
+let currentKelas = 'Kelas 10';
+let courseSubject = '', courseSearch = '', searchTimeout;
+let shopPlatform = 'shopee';
+let bookCatFilter = '', bookSearchQ = '';
+let quizData = null, quizAnswers = [], quizStart = 0, quizGameId = '', quizTimer = null;
+
+// ═══════════════════════════════════════════════
+//  VIDEO LIBRARY
+// ═══════════════════════════════════════════════
+const VIDEO_LIBRARY = {
+  'Matematika': {
+    'Kelas 10': [
+      { bab:'Bab 1 – Eksponen & Logaritma', emoji:'🔢', color:'#dbeafe', colorText:'#1d4ed8',
+        videos:[
+          { id:'VJdmwh-ECQo', judul:'Eksponen – Perkalian Berulang & Sifat Bilangan Pangkat', durasi:'22 mnt', level:'Dasar' },
+          { id:'AlrOq3W7IZ4', judul:'Eksponen Itu Asyik! – Study with Jerome Polin', durasi:'29 mnt', level:'Dasar' },
+          { id:'FqYIq9kdshM', judul:'Logaritma Itu Gampang! – Study with Jerome Polin', durasi:'31 mnt', level:'Dasar' },
+          { id:'3b8Kd4NsmDM', judul:'Logaritma Kelas 10 – Konsep & Contoh Soal', durasi:'18 mnt', level:'Menengah' },
+          { id:'ucsmFuTluaU', judul:'Eksponen & Logaritma – Latihan Soal Lengkap', durasi:'25 mnt', level:'Lanjut' },
+        ]},
+      { bab:'Bab 2 – Persamaan & Fungsi Kuadrat', emoji:'📊', color:'#fce7f3', colorText:'#9d174d',
+        videos:[
+          { id:'HE_9PX0vjJk', judul:'Persamaan Kuadrat – Pemfaktoran, Melengkapi Kuadrat, ABC', durasi:'26 mnt', level:'Dasar' },
+          { id:'UIjQ1dKrt-k', judul:'Overview Materi Matematika Kelas 10 Kurikulum Merdeka', durasi:'14 mnt', level:'Dasar' },
+          { id:'tDeXVkK3KIE', judul:'Fungsi Kuadrat – Grafik, Nilai Maks & Min', durasi:'21 mnt', level:'Menengah' },
+        ]},
+      { bab:'Bab 3 – Trigonometri', emoji:'📐', color:'#fff7ed', colorText:'#c2410c',
+        videos:[
+          { id:'KNFVxzj6TCE', judul:'Perbandingan Trigonometri – Konsep Dasar', durasi:'23 mnt', level:'Dasar' },
+          { id:'10ftb68aoSA', judul:'Nilai Trigonometri Sudut Istimewa', durasi:'18 mnt', level:'Dasar' },
+          { id:'J6uvEKUeIcU', judul:'Trigonometri Kelas 10 – Persiapan UTBK Lengkap', durasi:'35 mnt', level:'Menengah' },
+        ]},
+      { bab:'Bab 4 – Vektor', emoji:'➡️', color:'#ede9fe', colorText:'#6d28d9',
+        videos:[
+          { id:'3Eg2iH3XV-c', judul:'Vektor – Pengertian, Notasi & Jenis Vektor', durasi:'21 mnt', level:'Dasar' },
+          { id:'UsOrSuhIAH0', judul:'Vektor – Pembahasan Soal Lengkap Kelas 10', durasi:'28 mnt', level:'Menengah' },
+        ]},
+      { bab:'Bab 5 – Barisan & Deret', emoji:'🔁', color:'#dcfce7', colorText:'#15803d',
+        videos:[
+          { id:'PbDp6XRTDAQ', judul:'Barisan Aritmetika – Pengertian, Rumus & Contoh', durasi:'20 mnt', level:'Dasar' },
+          { id:'CDHv_aMHNsE', judul:'Barisan Geometri – Konsep & Soal Terapan', durasi:'24 mnt', level:'Dasar' },
+        ]},
+    ],
+    'Kelas 11': [
+      { bab:'Bab 1 – Fungsi Komposisi & Invers', emoji:'🔄', color:'#dbeafe', colorText:'#1d4ed8',
+        videos:[
+          { id:'nG9cw7IFbJc', judul:'Fungsi Komposisi – Pengertian & Cara Menghitung', durasi:'20 mnt', level:'Dasar' },
+          { id:'O8VrRPxaLBY', judul:'Fungsi Invers – Rumus & Contoh Soal Lengkap', durasi:'22 mnt', level:'Menengah' },
+        ]},
+      { bab:'Bab 2 – Limit Fungsi', emoji:'∞', color:'#dcfce7', colorText:'#15803d',
+        videos:[
+          { id:'riXcZT2ICjA', judul:'Limit Fungsi – Pengertian, Sifat & Contoh Dasar', durasi:'25 mnt', level:'Dasar' },
+          { id:'WUvTyaaNkzM', judul:'Limit Aljabar – Teknik Substitusi & Faktorisasi', durasi:'28 mnt', level:'Menengah' },
+        ]},
+      { bab:'Bab 3 – Turunan Fungsi', emoji:'📉', color:'#ede9fe', colorText:'#6d28d9',
+        videos:[
+          { id:'54_XRjHhZzQ', judul:'Turunan Fungsi – Definisi, Notasi & Aturan Dasar', durasi:'24 mnt', level:'Dasar' },
+          { id:'rfG8ce4nNh0', judul:'Aplikasi Turunan – Nilai Maks, Min & Titik Stasioner', durasi:'30 mnt', level:'Menengah' },
+        ]},
+      { bab:'Bab 4 – Integral', emoji:'∫', color:'#fff7ed', colorText:'#c2410c',
+        videos:[
+          { id:'gFBD2U7T87M', judul:'Integral Tak Tentu – Konsep & Rumus', durasi:'26 mnt', level:'Dasar' },
+          { id:'IAh6xn2kjyE', judul:'Integral Tentu – Teorema Dasar Kalkulus', durasi:'31 mnt', level:'Menengah' },
+        ]},
+    ],
+    'Kelas 12': [
+      { bab:'Bab 1 – Program Linear', emoji:'📋', color:'#dbeafe', colorText:'#1d4ed8',
+        videos:[
+          { id:'JK42eFIxxOA', judul:'Program Linear – Model Matematika & SPtLDV', durasi:'23 mnt', level:'Dasar' },
+          { id:'tFr3wqNfbCY', judul:'Program Linear – Metode Titik Pojok & Nilai Optimal', durasi:'27 mnt', level:'Menengah' },
+        ]},
+      { bab:'Bab 2 – Matriks', emoji:'🔲', color:'#dcfce7', colorText:'#15803d',
+        videos:[
+          { id:'xS_J0PkCFqM', judul:'Matriks – Pengertian, Jenis & Operasi Dasar', durasi:'24 mnt', level:'Dasar' },
+          { id:'SxT2nTRbB_Y', judul:'Determinan & Invers Matriks', durasi:'28 mnt', level:'Menengah' },
+        ]},
+      { bab:'Bab 3 – Statistika & Peluang Lanjutan', emoji:'📈', color:'#ecfdf5', colorText:'#065f46',
+        videos:[
+          { id:'kKKM8Y-u7ds', judul:'Peluang – Kejadian Majemuk, Saling Lepas & Bebas', durasi:'24 mnt', level:'Dasar' },
+          { id:'saTMcQ5IAHU', judul:'Distribusi Binomial & Normal', durasi:'28 mnt', level:'Menengah' },
+        ]},
+    ],
+  },
+  'Fisika': {
+    'Kelas 10': [
+      { bab:'Bab 1 – Besaran & Pengukuran', emoji:'📏', color:'#dcfce7', colorText:'#15803d',
+        videos:[
+          { id:'TZFJhD1f0Ks', judul:'Besaran & Satuan – Besaran Pokok & Turunan SI', durasi:'18 mnt', level:'Dasar' },
+          { id:'F9mG8y4OuJ0', judul:'Angka Penting & Notasi Ilmiah', durasi:'20 mnt', level:'Dasar' },
+        ]},
+      { bab:'Bab 2 – Kinematika Gerak Lurus', emoji:'🚀', color:'#fff7ed', colorText:'#c2410c',
+        videos:[
+          { id:'1tSqSMOyNFE', judul:'GLB & GLBB – Gerak Lurus Beraturan & Berubah Beraturan', durasi:'27 mnt', level:'Dasar' },
+          { id:'kKKM8Y-u7ds', judul:'Grafik Posisi-Waktu & Kecepatan-Waktu', durasi:'20 mnt', level:'Menengah' },
+        ]},
+      { bab:'Bab 3 – Hukum Newton & Dinamika', emoji:'⚡', color:'#fce7f3', colorText:'#9d174d',
+        videos:[
+          { id:'saTMcQ5IAHU', judul:'Hukum Newton I, II, III – Lengkap dengan Contoh', durasi:'30 mnt', level:'Dasar' },
+          { id:'HzHWI78JZQU', judul:'Gaya Gesek – Kinetis, Statis & Soal Terapan', durasi:'25 mnt', level:'Menengah' },
+        ]},
+      { bab:'Bab 4 – Usaha, Energi & Momentum', emoji:'💥', color:'#fef9c3', colorText:'#854d0e',
+        videos:[
+          { id:'8e6J0NkMPbQ', judul:'Usaha & Energi – Konsep, Satuan & Contoh Soal', durasi:'24 mnt', level:'Dasar' },
+          { id:'OEqh-zyiJfQ', judul:'Momentum & Impuls – Tumbukan Elastis & Tak Elastis', durasi:'22 mnt', level:'Menengah' },
+        ]},
+    ],
+    'Kelas 11': [
+      { bab:'Bab 1 – Fluida Statis & Dinamis', emoji:'💧', color:'#ccfbf1', colorText:'#0f766e',
+        videos:[
+          { id:'2t3LVE9kPBI', judul:'Tekanan Hidrostatis & Hukum Pascal', durasi:'24 mnt', level:'Dasar' },
+          { id:'CDHv_aMHNsE', judul:'Fluida Dinamis – Persamaan Kontinuitas & Bernoulli', durasi:'28 mnt', level:'Menengah' },
+        ]},
+      { bab:'Bab 2 – Termodinamika', emoji:'🔥', color:'#fff7ed', colorText:'#c2410c',
+        videos:[
+          { id:'gRhYOSHKGzs', judul:'Hukum Termodinamika I & II', durasi:'30 mnt', level:'Menengah' },
+          { id:'Q6Jcp9AnnKA', judul:'Mesin Carnot & Efisiensi Mesin Kalor', durasi:'22 mnt', level:'Lanjut' },
+        ]},
+      { bab:'Bab 3 – Gelombang & Bunyi', emoji:'🔊', color:'#dcfce7', colorText:'#15803d',
+        videos:[
+          { id:'aXcGqIZfkFE', judul:'Gelombang – Transversal, Longitudinal & Besaran', durasi:'23 mnt', level:'Dasar' },
+          { id:'nRdRa6BxLkI', judul:'Gelombang Bunyi & Efek Doppler', durasi:'26 mnt', level:'Menengah' },
+        ]},
+    ],
+    'Kelas 12': [
+      { bab:'Bab 1 – Listrik Statis & Dinamis', emoji:'⚡', color:'#dbeafe', colorText:'#1d4ed8',
+        videos:[
+          { id:'1tSqSMOyNFE', judul:'Muatan Listrik & Hukum Coulomb', durasi:'22 mnt', level:'Dasar' },
+          { id:'saTMcQ5IAHU', judul:'Hukum Ohm & Rangkaian Seri Paralel', durasi:'25 mnt', level:'Dasar' },
+          { id:'HzHWI78JZQU', judul:'Hukum Kirchhoff – Analisis Rangkaian Kompleks', durasi:'30 mnt', level:'Menengah' },
+        ]},
+      { bab:'Bab 2 – Medan Magnet & Induksi', emoji:'🧲', color:'#ede9fe', colorText:'#6d28d9',
+        videos:[
+          { id:'JK42eFIxxOA', judul:'Medan Magnet – Hukum Biot-Savart & Ampere', durasi:'26 mnt', level:'Dasar' },
+          { id:'tFr3wqNfbCY', judul:'Induksi Elektromagnetik – Hukum Faraday & Lenz', durasi:'28 mnt', level:'Menengah' },
+        ]},
+      { bab:'Bab 3 – Fisika Modern', emoji:'☢️', color:'#fce7f3', colorText:'#9d174d',
+        videos:[
+          { id:'xS_J0PkCFqM', judul:'Teori Relativitas Einstein – E=mc²', durasi:'24 mnt', level:'Menengah' },
+          { id:'SxT2nTRbB_Y', judul:'Radioaktivitas – Peluruhan & Waktu Paruh', durasi:'25 mnt', level:'Menengah' },
+        ]},
+    ],
+  },
+  'Kimia': {
+    'Kelas 10': [
+      { bab:'Bab 1 – Struktur Atom & SPU', emoji:'⚛️', color:'#fae8ff', colorText:'#86198f',
+        videos:[
+          { id:'HzHWI78JZQU', judul:'Struktur Atom – Model Bohr & Teori Mekanika Kuantum', durasi:'24 mnt', level:'Dasar' },
+          { id:'AmOeQUkMCPo', judul:'Tabel Periodik – Golongan, Periode & Sifat Periodik', durasi:'20 mnt', level:'Dasar' },
+        ]},
+      { bab:'Bab 2 – Ikatan Kimia', emoji:'🔗', color:'#ede9fe', colorText:'#6d28d9',
+        videos:[
+          { id:'wnq3sZfVERs', judul:'Ikatan Ion & Kovalen – Perbedaan & Contoh Senyawa', durasi:'26 mnt', level:'Dasar' },
+          { id:'OEqh-zyiJfQ', judul:'Bentuk Molekul – Teori VSEPR & Hibridisasi', durasi:'28 mnt', level:'Menengah' },
+        ]},
+      { bab:'Bab 3 – Stoikiometri', emoji:'⚖️', color:'#dcfce7', colorText:'#15803d',
+        videos:[
+          { id:'nvXOaOcT4eE', judul:'Konsep Mol – Massa Molar & Bilangan Avogadro', durasi:'22 mnt', level:'Dasar' },
+          { id:'iHRDGlnN0Ck', judul:'Pereaksi Pembatas & Persen Hasil Reaksi', durasi:'27 mnt', level:'Menengah' },
+        ]},
+    ],
+    'Kelas 11': [
+      { bab:'Bab 1 – Laju Reaksi', emoji:'⏱️', color:'#dcfce7', colorText:'#15803d',
+        videos:[
+          { id:'nRdRa6BxLkI', judul:'Faktor-Faktor yang Mempengaruhi Laju Reaksi', durasi:'22 mnt', level:'Dasar' },
+          { id:'F9mG8y4OuJ0', judul:'Orde Reaksi & Tetapan Laju – Perhitungan', durasi:'25 mnt', level:'Lanjut' },
+        ]},
+      { bab:'Bab 2 – Kesetimbangan Kimia', emoji:'⚖️', color:'#dbeafe', colorText:'#1d4ed8',
+        videos:[
+          { id:'CkpnRzLanBM', judul:'Kesetimbangan Dinamis – Kc & Kp', durasi:'26 mnt', level:'Dasar' },
+          { id:'1tSqSMOyNFE', judul:'Asas Le Chatelier – Pergeseran Kesetimbangan', durasi:'23 mnt', level:'Menengah' },
+        ]},
+      { bab:'Bab 3 – Asam Basa & Buffer', emoji:'🧫', color:'#fff7ed', colorText:'#c2410c',
+        videos:[
+          { id:'kKKM8Y-u7ds', judul:'Teori Asam Basa – Arrhenius, Bronsted-Lowry, Lewis', durasi:'22 mnt', level:'Dasar' },
+          { id:'HzHWI78JZQU', judul:'Larutan Buffer – Cara Kerja & Perhitungan pH', durasi:'25 mnt', level:'Lanjut' },
+        ]},
+    ],
+    'Kelas 12': [
+      { bab:'Bab 1 – Elektrokimia', emoji:'🔋', color:'#fae8ff', colorText:'#86198f',
+        videos:[
+          { id:'wnq3sZfVERs', judul:'Sel Volta – Elektroda, Jembatan Garam & Potensial', durasi:'26 mnt', level:'Dasar' },
+          { id:'QqjcCvzWwww', judul:'Sel Elektrolisis – Hukum Faraday I & II', durasi:'28 mnt', level:'Menengah' },
+        ]},
+      { bab:'Bab 2 – Kimia Organik', emoji:'🌿', color:'#ede9fe', colorText:'#6d28d9',
+        videos:[
+          { id:'iHRDGlnN0Ck', judul:'Senyawa Organik – Golongan Fungsi & Isomer', durasi:'28 mnt', level:'Dasar' },
+          { id:'CDHv_aMHNsE', judul:'Polimer – Monomer, Jenis & Proses Polimerisasi', durasi:'22 mnt', level:'Menengah' },
+        ]},
+    ],
+  },
+  'Biologi': {
+    'Kelas 10': [
+      { bab:'Bab 1 – Keanekaragaman Hayati', emoji:'🌏', color:'#dcfce7', colorText:'#15803d',
+        videos:[
+          { id:'vHIFjSn0gNc', judul:'Keanekaragaman Hayati – Gen, Spesies & Ekosistem', durasi:'22 mnt', level:'Dasar' },
+          { id:'2t3LVE9kPBI', judul:'Keanekaragaman Hayati Indonesia & Konservasi', durasi:'18 mnt', level:'Menengah' },
+        ]},
+      { bab:'Bab 2 – Sel & Biologi Molekuler', emoji:'🦠', color:'#fae8ff', colorText:'#86198f',
+        videos:[
+          { id:'PbDp6XRTDAQ', judul:'Sel Prokariotik & Eukariotik – Struktur & Perbedaan', durasi:'22 mnt', level:'Dasar' },
+          { id:'J3fBWyDGX0o', judul:'Transpor Membran – Difusi, Osmosis & Transpor Aktif', durasi:'23 mnt', level:'Menengah' },
+        ]},
+    ],
+    'Kelas 11': [
+      { bab:'Bab 1 – Sistem Peredaran Darah', emoji:'🫀', color:'#fce7f3', colorText:'#9d174d',
+        videos:[
+          { id:'kKKM8Y-u7ds', judul:'Jantung & Pembuluh Darah – Siklus Jantung', durasi:'26 mnt', level:'Menengah' },
+          { id:'saTMcQ5IAHU', judul:'Sistem Limfa & Penyakit Kardiovaskular', durasi:'20 mnt', level:'Lanjut' },
+        ]},
+      { bab:'Bab 2 – Sistem Saraf & Hormon', emoji:'🧠', color:'#ede9fe', colorText:'#6d28d9',
+        videos:[
+          { id:'nvXOaOcT4eE', judul:'Sel Saraf (Neuron) – Struktur & Impuls Saraf', durasi:'24 mnt', level:'Dasar' },
+          { id:'iHRDGlnN0Ck', judul:'Sistem Endokrin – Kelenjar & Hormon', durasi:'22 mnt', level:'Lanjut' },
+        ]},
+    ],
+    'Kelas 12': [
+      { bab:'Bab 1 – Materi Genetik & Reproduksi Sel', emoji:'🧬', color:'#dbeafe', colorText:'#1d4ed8',
+        videos:[
+          { id:'CDHv_aMHNsE', judul:'DNA, RNA & Kode Genetik – Replikasi DNA', durasi:'26 mnt', level:'Dasar' },
+          { id:'J3fBWyDGX0o', judul:'Mitosis & Meiosis – Tahap & Perbedaan', durasi:'28 mnt', level:'Menengah' },
+          { id:'gRhYOSHKGzs', judul:'Sintesis Protein – Transkripsi & Translasi', durasi:'25 mnt', level:'Lanjut' },
+        ]},
+      { bab:'Bab 2 – Pola Hereditas & Genetika', emoji:'🧬', color:'#fce7f3', colorText:'#9d174d',
+        videos:[
+          { id:'Q6Jcp9AnnKA', judul:'Hukum Mendel I & II – Monohibrid & Dihibrid', durasi:'25 mnt', level:'Dasar' },
+          { id:'aXcGqIZfkFE', judul:'Penyimpangan Hukum Mendel – Epistasi & Kriptomeri', durasi:'27 mnt', level:'Menengah' },
+        ]},
+    ],
+  },
+  'Ekonomi': {
+    'Kelas 10': [
+      { bab:'Bab 1 – Konsep Dasar Ekonomi', emoji:'💹', color:'#fef9c3', colorText:'#854d0e',
+        videos:[
+          { id:'UIjQ1dKrt-k', judul:'Ilmu Ekonomi – Pengertian, Ruang Lingkup & Manfaat', durasi:'18 mnt', level:'Dasar' },
+          { id:'VJdmwh-ECQo', judul:'Sistem Ekonomi – Tradisional, Liberal, Komando & Campuran', durasi:'22 mnt', level:'Dasar' },
+        ]},
+      { bab:'Bab 2 – Permintaan & Penawaran', emoji:'📊', color:'#dcfce7', colorText:'#15803d',
+        videos:[
+          { id:'AlrOq3W7IZ4', judul:'Permintaan – Hukum, Kurva & Faktor-Faktor', durasi:'24 mnt', level:'Dasar' },
+          { id:'FqYIq9kdshM', judul:'Penawaran – Hukum, Kurva & Determinan', durasi:'22 mnt', level:'Dasar' },
+          { id:'3b8Kd4NsmDM', judul:'Keseimbangan Pasar – Titik Ekuilibrium', durasi:'25 mnt', level:'Menengah' },
+        ]},
+    ],
+    'Kelas 11': [
+      { bab:'Bab 1 – Pendapatan Nasional', emoji:'🏦', color:'#fef9c3', colorText:'#854d0e',
+        videos:[
+          { id:'Q6Jcp9AnnKA', judul:'GDP, GNP, NNP – Konsep Pendapatan Nasional', durasi:'24 mnt', level:'Dasar' },
+          { id:'nRdRa6BxLkI', judul:'Pendapatan Per Kapita & Distribusi Pendapatan', durasi:'20 mnt', level:'Menengah' },
+        ]},
+      { bab:'Bab 2 – Kebijakan Moneter & Fiskal', emoji:'🏛️', color:'#dbeafe', colorText:'#1d4ed8',
+        videos:[
+          { id:'kKKM8Y-u7ds', judul:'Kebijakan Moneter – Bank Indonesia & Instrumennya', durasi:'25 mnt', level:'Dasar' },
+          { id:'saTMcQ5IAHU', judul:'Kebijakan Fiskal – APBN & Jenis Kebijakan', durasi:'22 mnt', level:'Menengah' },
+        ]},
+    ],
+    'Kelas 12': [
+      { bab:'Bab 1 – Akuntansi Dasar', emoji:'📒', color:'#fef9c3', colorText:'#854d0e',
+        videos:[
+          { id:'AmOeQUkMCPo', judul:'Konsep Dasar Akuntansi – Persamaan & Siklus', durasi:'22 mnt', level:'Dasar' },
+          { id:'wnq3sZfVERs', judul:'Jurnal Umum – Pencatatan Transaksi', durasi:'26 mnt', level:'Dasar' },
+          { id:'QqjcCvzWwww', judul:'Buku Besar & Neraca Saldo', durasi:'24 mnt', level:'Menengah' },
+        ]},
+    ],
+  },
+  'Bahasa Inggris': {
+    'Kelas 10': [
+      { bab:'Grammar – Tenses & Structure', emoji:'✏️', color:'#dbeafe', colorText:'#1d4ed8',
+        videos:[
+          { id:'8e6J0NkMPbQ', judul:'Tenses Lengkap – Simple, Continuous, Perfect', durasi:'40 mnt', level:'Dasar' },
+          { id:'xS_J0PkCFqM', judul:'Passive Voice & Reported Speech', durasi:'30 mnt', level:'Menengah' },
+        ]},
+      { bab:'Reading & Vocabulary', emoji:'📖', color:'#fff7ed', colorText:'#c2410c',
+        videos:[
+          { id:'JK42eFIxxOA', judul:'Reading Comprehension – Strategi Menjawab Soal', durasi:'28 mnt', level:'Dasar' },
+          { id:'tFr3wqNfbCY', judul:'Vocabulary Building – Word Formation & Context Clues', durasi:'25 mnt', level:'Menengah' },
+        ]},
+    ],
+    'Kelas 11': [
+      { bab:'Grammar Lanjutan', emoji:'📝', color:'#dbeafe', colorText:'#1d4ed8',
+        videos:[
+          { id:'SxT2nTRbB_Y', judul:'Conditional Sentences – Type 1, 2 & 3', durasi:'28 mnt', level:'Menengah' },
+          { id:'8e6J0NkMPbQ', judul:'Modal Verbs & Perfect Tenses', durasi:'30 mnt', level:'Menengah' },
+        ]},
+    ],
+    'TOEFL/IELTS': [
+      { bab:'TOEFL Preparation', emoji:'🎓', color:'#dbeafe', colorText:'#1d4ed8',
+        videos:[
+          { id:'JK42eFIxxOA', judul:'TOEFL Reading – Strategi Jawab Soal Cepat & Tepat', durasi:'28 mnt', level:'Menengah' },
+          { id:'xS_J0PkCFqM', judul:'TOEFL Structure – Error Recognition', durasi:'30 mnt', level:'Menengah' },
+        ]},
+      { bab:'IELTS Preparation', emoji:'🌐', color:'#dcfce7', colorText:'#15803d',
+        videos:[
+          { id:'tFr3wqNfbCY', judul:'IELTS Academic Reading – Tips Band 7+', durasi:'35 mnt', level:'Lanjut' },
+          { id:'8e6J0NkMPbQ', judul:'IELTS Writing Task 1 & 2 – Strategi Lengkap', durasi:'40 mnt', level:'Lanjut' },
+        ]},
+    ],
+  },
+};
+
+// ═══════════════════════════════════════════════
+//  BOOK DATABASE (Marketplace)
+// ═══════════════════════════════════════════════
+const BOOKS = [
+  { id:'b001', emoji:'📗', title:'Wangsit UTBK Saintek', subject:'UTBK/SNBT', price:'Rp 89.000', stars:'⭐4.9', sold:12500, desc:'Buku soal & pembahasan UTBK Saintek lengkap.', keyword:'wangsit utbk saintek', bg:'#dcfce7' },
+  { id:'b002', emoji:'📘', title:'Wangsit UTBK Soshum', subject:'UTBK/SNBT', price:'Rp 89.000', stars:'⭐4.9', sold:10200, desc:'Buku soal & pembahasan UTBK Soshum lengkap.', keyword:'wangsit utbk soshum', bg:'#dbeafe' },
+  { id:'b003', emoji:'📕', title:'SNBT Drill Soal 1000', subject:'UTBK/SNBT', price:'Rp 75.000', stars:'⭐4.8', sold:8900, desc:'1000 soal drill SNBT dengan pembahasan super lengkap.', keyword:'snbt drill soal 1000', bg:'#fce7f3' },
+  { id:'b004', emoji:'📙', title:'Rumus Jitu UTBK TPS', subject:'UTBK/SNBT', price:'Rp 65.000', stars:'⭐4.7', sold:7200, desc:'Rangkuman rumus TPS untuk UTBK.', keyword:'rumus jitu utbk tps', bg:'#fff7ed' },
+  { id:'b005', emoji:'🔢', title:'Matematika Peminatan Kelas 12', subject:'Matematika', price:'Rp 72.000', stars:'⭐4.8', sold:6100, desc:'Buku Matematika Peminatan untuk kelas 12 IPA.', keyword:'buku matematika peminatan kelas 12', bg:'#dbeafe' },
+  { id:'b006', emoji:'📐', title:'Kalkulus untuk SMA', subject:'Matematika', price:'Rp 68.000', stars:'⭐4.7', sold:4300, desc:'Buku kalkulus SMA yang membahas turunan dan integral.', keyword:'buku kalkulus sma', bg:'#ede9fe' },
+  { id:'b007', emoji:'⚡', title:'Fisika Dasar SMA Lengkap', subject:'Fisika', price:'Rp 78.000', stars:'⭐4.8', sold:5400, desc:'Buku Fisika SMA kelas 10-12 lengkap.', keyword:'buku fisika dasar sma lengkap', bg:'#dcfce7' },
+  { id:'b008', emoji:'🧲', title:'Soal Pilihan Fisika UTBK', subject:'Fisika', price:'Rp 62.000', stars:'⭐4.6', sold:3800, desc:'Kumpulan soal pilihan Fisika khusus persiapan UTBK.', keyword:'soal pilihan fisika utbk', bg:'#fff7ed' },
+  { id:'b009', emoji:'⚗️', title:'Kimia Organik & Anorganik SMA', subject:'Kimia', price:'Rp 70.000', stars:'⭐4.7', sold:4100, desc:'Buku kimia SMA yang komprehensif.', keyword:'buku kimia organik anorganik sma', bg:'#fae8ff' },
+  { id:'b010', emoji:'🧪', title:'Stoikiometri & Termokimia', subject:'Kimia', price:'Rp 58.000', stars:'⭐4.6', sold:3200, desc:'Buku khusus stoikiometri dan termokimia untuk SMA.', keyword:'buku stoikiometri termokimia sma', bg:'#dcfce7' },
+  { id:'b011', emoji:'🦠', title:'Biologi Sel & Molekuler', subject:'Biologi', price:'Rp 69.000', stars:'⭐4.8', sold:5000, desc:'Buku biologi sel dan molekuler untuk kelas 11-12.', keyword:'buku biologi sel molekuler sma', bg:'#ecfdf5' },
+  { id:'b012', emoji:'🧬', title:'Genetika & Evolusi SMA', subject:'Biologi', price:'Rp 65.000', stars:'⭐4.7', sold:4200, desc:'Materi genetika, hereditas, dan evolusi.', keyword:'buku genetika evolusi sma', bg:'#fce7f3' },
+  { id:'b013', emoji:'📖', title:'Grammar in Use for Indonesian', subject:'Bahasa Inggris', price:'Rp 95.000', stars:'⭐4.9', sold:9800, desc:'Buku grammar bahasa Inggris terlengkap.', keyword:'grammar in use bahasa inggris indonesia', bg:'#dbeafe' },
+  { id:'b014', emoji:'🎓', title:'TOEFL Preparation Complete', subject:'Bahasa Inggris', price:'Rp 115.000', stars:'⭐4.8', sold:7600, desc:'Buku persiapan TOEFL lengkap.', keyword:'buku toefl preparation indonesia', bg:'#fff7ed' },
+  { id:'b015', emoji:'💹', title:'Akuntansi Kelas 12 Kur. Merdeka', subject:'Ekonomi', price:'Rp 72.000', stars:'⭐4.7', sold:3900, desc:'Buku akuntansi kelas 12 sesuai kurikulum merdeka.', keyword:'buku akuntansi kelas 12 kurikulum merdeka', bg:'#fef9c3' },
+  { id:'b016', emoji:'🏛️', title:'Ekonomi Makro & Mikro SMA', subject:'Ekonomi', price:'Rp 68.000', stars:'⭐4.6', sold:3300, desc:'Buku ekonomi makro dan mikro untuk SMA.', keyword:'buku ekonomi makro mikro sma', bg:'#dcfce7' },
+];
+
+// ═══════════════════════════════════════════════
+//  API HELPER
+// ═══════════════════════════════════════════════
+async function api(method, path, body) {
+  if (DEMO_MODE) return {success: false, message: 'Demo dinonaktifkan. Menyambung ke server asli.'};
+  const opts = {
+    method,
+    headers: { 'Content-Type':'application/json', ...(token ? {Authorization:'Bearer '+token} : {}) },
+    ...(body ? {body:JSON.stringify(body)} : {})
+  };
+  try {
+    const r = await fetch(API + path, opts);
+    return await r.json();
+  } catch(e) {
+    return { success:false, message:'Gagal terhubung ke server.' };
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════
+let toastTimer;
+function toast(msg, dur=2400) {
+  const el = document.getElementById('toast-el');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), dur);
+}
+
+// ═══════════════════════════════════════════════
+//  AUTH & LOGOUT (Telah Ditambahkan)
+// ═══════════════════════════════════════════════
+function switchTab(t) {
+  document.getElementById('form-login').style.display = t==='login'?'block':'none';
+  document.getElementById('form-reg').style.display   = t==='reg'?'block':'none';
+  document.getElementById('tab-login').className = 'tab'+(t==='login'?' on':'');
+  document.getElementById('tab-reg').className   = 'tab'+(t==='reg'?' on':'');
+}
+
+async function doLogin() {
+  const btn=document.getElementById('btn-login');
+  const email=document.getElementById('l-email').value.trim();
+  const pass=document.getElementById('l-pass').value;
+  if(!email||!pass){toast('⚠️ Isi email dan password!');return;}
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Masuk...';
+  
+  const res=await api('POST','/api/auth/login',{email,password:pass});
+  
+  btn.disabled=false; btn.innerHTML='Masuk Sekarang';
+  if(!res.success){toast('❌ '+res.message);return;}
+  token=res.token; user=res.user;
+  localStorage.setItem('zd_token',token);
+  localStorage.setItem('zd_user',JSON.stringify(user));
+  enterApp();
+}
+
+async function doRegister() {
+  const btn=document.getElementById('btn-reg');
+  const name=document.getElementById('r-name').value.trim();
+  const email=document.getElementById('r-email').value.trim();
+  const phone=document.getElementById('r-phone').value.trim();
+  const pass=document.getElementById('r-pass').value;
+  if(!name||!email||!pass){toast('⚠️ Lengkapi semua field!');return;}
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Mendaftar...';
+  
+  const res=await api('POST','/api/auth/register',{name,email,phone,password:pass});
+  
+  btn.disabled=false; btn.innerHTML='Daftar Sekarang';
+  if(!res.success){toast('❌ '+res.message);return;}
+  token=res.token; user=res.user;
+  localStorage.setItem('zd_token',token);
+  localStorage.setItem('zd_user',JSON.stringify(user));
+  toast('🎉 Registrasi berhasil!');
+  enterApp();
+}
+
+// INI FUNGSI LOGOUT YANG HILANG SEBELUMNYA
+function doLogout() {
+  localStorage.removeItem('zd_token');
+  localStorage.removeItem('zd_user');
+  token = '';
+  user = null;
+  document.getElementById('bnav').style.display = 'none';
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('s-splash').classList.add('active');
+  toast('Berhasil keluar.');
+}
+
+function enterApp() {
+  document.getElementById('s-splash').classList.remove('active');
+  document.getElementById('bnav').style.display='flex';
+  navTo('home');
+  loadUserData();
+}
+
+// ═══════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════
+const navMap={home:'s-home',belajar:'s-belajar',wallet:'s-wallet',shop:'s-shop',games:'s-games',tutor:'s-tutor'};
+function navTo(name) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const sid=navMap[name];
+  if(sid){document.getElementById(sid).classList.add('active');document.getElementById(sid).scrollTop=0;}
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  const nb=document.getElementById('nav-'+name);
+  if(nb) nb.classList.add('active');
+  if(name==='belajar') { if(currentBelajarTab==='premium') loadCourses(); else renderVideoList(); }
+  if(name==='wallet')  loadWallet();
+  if(name==='shop')    renderBooks();
+  if(name==='games')   loadGames();
+  if(name==='tutor')   loadTutors();
+}
+
+// ═══════════════════════════════════════════════
+//  MODALS
+// ═══════════════════════════════════════════════
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.overlay').forEach(ov=>{
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.classList.remove('open');});
+});
+
+// ═══════════════════════════════════════════════
+//  LOAD USER
+// ═══════════════════════════════════════════════
+async function loadUserData() {
+  const res=await api('GET','/api/auth/me');
+  if(!res.success) { doLogout(); toast('❌ Sesi berakhir.'); return; }
+  user=res.user;
+  localStorage.setItem('zd_user',JSON.stringify(user));
+  document.getElementById('home-name').textContent=user.name.split(' ')[0];
+  document.getElementById('home-balance').textContent='Rp '+(user.balance||0).toLocaleString('id-ID');
+  document.getElementById('user-points').textContent=(user.points||0).toLocaleString('id-ID');
+  if((user.stats?.unread_notifications||0)>0) document.getElementById('notif-dot').style.display='block';
+  loadActivity();
+  loadHomeCoursesPreview();
+}
+
+async function loadHomeCoursesPreview() {
+  const res=await api('GET','/api/courses?limit=4&sort=popular');
+  if(!res.success)return;
+  const html=res.courses.map(c=>`
+    <div class="ccard" onclick="showCourseDetail('${c.id}','${esc(c.title)}',${c.price},${c.is_enrolled||0},${c.my_progress||0})">
+      <div class="cc-thumb" style="background:${subjectBg(c.subject)}">${c.thumbnail||'📚'}</div>
+      <div class="cc-body">
+        <div class="cc-badge" style="background:${subjectBg(c.subject)};color:${subjectColor(c.subject)}">${c.subject}</div>
+        <div class="cc-title">${c.title}</div>
+        <div class="cc-meta">⭐ ${c.rating} · ${(c.total_students||0).toLocaleString('id-ID')} siswa</div>
+        ${c.is_enrolled?`<div class="cc-prog"><div class="cc-bar" style="width:${c.my_progress||0}%"></div></div>`:''}
+      </div>
+    </div>`).join('');
+  document.getElementById('home-courses').innerHTML=html;
+}
+
+async function loadActivity() {
+  const res=await api('GET','/api/wallet/transactions?limit=5');
+  if(!res.success)return;
+  const html=res.transactions.map(t=>`
+    <div class="ai">
+      <div class="ai-ico" style="background:${t.type==='credit'?'#dcfce7':'#fee2e2'}">${t.type==='credit'?'💳':'💸'}</div>
+      <div class="ai-info"><div class="ai-title">${t.description}</div><div class="ai-sub">${formatDate(t.created_at)}</div></div>
+      <div class="ai-amt ${t.type==='credit'?'plus':'minus'}">${t.type==='credit'?'+':'-'}Rp ${t.amount.toLocaleString('id-ID')}</div>
+    </div>`).join()||'<div style="padding:16px;color:var(--muted);font-size:13px">Belum ada transaksi</div>';
+  document.getElementById('home-activity').innerHTML=html;
+}
+
+// ═══════════════════════════════════════════════
+//  BELAJAR — TAB SWITCH
+// ═══════════════════════════════════════════════
+function switchBelajarTab(t) {
+  currentBelajarTab = t;
+  document.getElementById('btab-premium').className='btab'+(t==='premium'?' on':'');
+  document.getElementById('btab-video').className='btab'+(t==='video'?' on':'');
+  document.getElementById('panel-premium').style.display=t==='premium'?'block':'none';
+  document.getElementById('panel-video').style.display=t==='video'?'block':'none';
+  if(t==='premium') loadCourses();
+  if(t==='video') renderVideoList();
+}
+
+// ═══════════════════════════════════════════════
+//  COURSES (Premium)
+// ═══════════════════════════════════════════════
+async function loadCourses() {
+  document.getElementById('course-grid').innerHTML='<div class="skeleton" style="height:160px;border-radius:14px"></div>'.repeat(4);
+  let url='/api/courses?limit=20';
+  if(courseSubject) url+=`&subject=${encodeURIComponent(courseSubject)}`;
+  if(courseSearch)  url+=`&search=${encodeURIComponent(courseSearch)}`;
+  const res=await api('GET',url);
+  if(!res.success){toast('❌ Gagal memuat kelas.');return;}
+  const html=res.courses.map(c=>`
+    <div class="cgc" onclick="showCourseDetail('${c.id}','${esc(c.title)}',${c.price},${c.is_enrolled||0},${c.my_progress||0})">
+      <div class="cgc-th" style="background:${subjectBg(c.subject)}">${c.thumbnail||'📚'}</div>
+      <div class="cgc-b">
+        <div class="cgc-subj">${c.subject}</div>
+        <div class="cgc-name">${c.title}</div>
+        <div class="cgc-foot">
+          <span class="price">${c.is_enrolled?'✅ Terdaftar':'Rp '+Math.round(c.price/1000)+'rb'}</span>
+          <span class="rating">⭐ ${c.rating}</span>
+        </div>
+      </div>
+    </div>`).join()||'<div style="padding:20px;color:var(--muted);grid-column:span 2;text-align:center">Kelas tidak ditemukan</div>';
+  document.getElementById('course-grid').innerHTML=html;
+}
+
+function filterCourse(el,subj) {
+  courseSubject=subj;
+  document.querySelectorAll('#course-pills .pill').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  loadCourses();
+}
+function debounceSearch() {
+  courseSearch=document.getElementById('course-search').value;
+  clearTimeout(searchTimeout);
+  searchTimeout=setTimeout(loadCourses,400);
+}
+
+async function showCourseDetail(id,title,price,enrolled,progress) {
+  if(enrolled) {
+    const newProg=Math.min(100,progress+10);
+    await api('PUT',`/api/courses/${id}/progress`,{progress:newProg});
+    toast(`📚 Melanjutkan "${title}" — Progress: ${newProg}%`);
+    loadHomeCoursesPreview(); loadCourses();
+    return;
+  }
+  const bal=user?.balance||0;
+  if(bal<price){toast(`💳 Saldo kurang! Butuh Rp ${price.toLocaleString('id-ID')}, kamu punya Rp ${bal.toLocaleString('id-ID')}`);return;}
+  if(!confirm(`Daftar kelas "${title}" seharga Rp ${price.toLocaleString('id-ID')}?\n\nSaldo: Rp ${bal.toLocaleString('id-ID')}`)) return;
+  const res=await api('POST',`/api/courses/${id}/enroll`);
+  if(res.success){
+    toast('🎉 '+res.message);
+    user.balance=res.new_balance;
+    localStorage.setItem('zd_user',JSON.stringify(user));
+    document.getElementById('home-balance').textContent='Rp '+res.new_balance.toLocaleString('id-ID');
+    loadCourses(); loadHomeCoursesPreview();
+  } else toast('❌ '+res.message);
+}
+
+// ═══════════════════════════════════════════════
+//  VIDEO GRATIS — YouTube Embed
+// ═══════════════════════════════════════════════
+function filterKelas(el, kelas) {
+  currentKelas = kelas;
+  document.querySelectorAll('.kpill').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  renderVideoList();
+}
+
+function filterVideoSubjects() {
+  renderVideoList();
+}
+
+function renderVideoList() {
+  const q = (document.getElementById('video-search')?.value||'').toLowerCase();
+  const container = document.getElementById('video-subject-list');
+  const subjects = Object.keys(VIDEO_LIBRARY);
+  let html = '';
+
+  subjects.forEach(subj => {
+    const babs = VIDEO_LIBRARY[subj][currentKelas] || [];
+    if(!babs.length) return;
+    if(q && !subj.toLowerCase().includes(q) && !babs.some(b=>b.bab.toLowerCase().includes(q))) return;
+
+    const totalVideos = babs.reduce((s,b)=>s+b.videos.length,0);
+    const babsHtml = babs.map(bab=>{
+      if(q && !subj.toLowerCase().includes(q) && !bab.bab.toLowerCase().includes(q) && !bab.videos.some(v=>v.judul.toLowerCase().includes(q))) return '';
+      return `
+        <div class="vbab-item" onclick="openVideoPlayer('${esc(subj)}','${esc(bab.bab)}','${encodeURIComponent(JSON.stringify(bab.videos))}')">
+          <div class="vbab-title">
+            <span>${bab.emoji}</span>
+            <span>${bab.bab}</span>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;margin-top:3px">
+            <span class="vbab-count">▶ ${bab.videos.length} video</span>
+            ${bab.videos.map(v=>`<span class="level-badge level-${v.level}">${v.level}</span>`).filter((v,i,a)=>a.indexOf(v)===i).join('')}
+          </div>
+        </div>`;
+    }).join('');
+
+    if(!babsHtml.trim()) return;
+
+    html += `
+      <div class="vsubj-card" id="vsc-${subj.replace(/\s+/g,'')}">
+        <div class="vsubj-head" onclick="toggleVSubj('${subj.replace(/\s+/g,'')}')">
+          <div class="vsubj-title">
+            <span style="width:32px;height:32px;border-radius:9px;background:${subjectBg(subj)};display:flex;align-items:center;justify-content:center;font-size:16px">${subjectEmoji(subj)}</span>
+            <span>${subj}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="vsubj-count">${totalVideos} video</span>
+            <span class="vsubj-arrow">▼</span>
+          </div>
+        </div>
+        <div class="vbab-list">${babsHtml}</div>
+      </div>`;
+  });
+
+  container.innerHTML = html || '<div style="padding:20px;text-align:center;color:var(--muted)">Mata pelajaran tidak ditemukan</div>';
+}
+
+function toggleVSubj(id) {
+  const card = document.getElementById('vsc-'+id);
+  card.classList.toggle('open');
+}
+
+function openVideoPlayer(subj, babTitle, encodedVideos) {
+  let videos;
+  try { 
+    // Menerjemahkan kembali data yang sudah diamankan
+    videos = JSON.parse(decodeURIComponent(encodedVideos)); 
+  }
+  catch(e) { toast('❌ Gagal memuat video.'); return; }
+
+  let currentVid = 0;
+
+  function renderPlayer() {
+    const v = videos[currentVid];
+    const listHtml = videos.map((vi,i)=>`
+      <div class="vli ${i===currentVid?'active':''}" onclick="changeVideo(${i})">
+        <div class="vli-num">${i===currentVid?'▶':i+1}</div>
+        <div class="vli-info">
+          <div class="vli-title">${vi.judul}</div>
+          <div class="vli-meta">${vi.durasi} · <span class="level-badge level-${vi.level}">${vi.level}</span></div>
+        </div>
+      </div>`).join('');
+
+    document.getElementById('video-modal-content').innerHTML = `
+      <button class="modal-close" onclick="closeModal('modal-video')">✕</button>
+      <div style="font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">${subj} · ${babTitle}</div>
+      <div class="modal-title" style="font-size:15px;margin-bottom:12px">${v.judul}</div>
+      <div class="yt-player-wrap">
+        <iframe id="yt-frame"
+          src="https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0&modestbranding=1"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <span style="font-size:12px;font-weight:700;color:var(--muted)">Daftar Video (${videos.length})</span>
+        <span class="level-badge level-${v.level}">${v.level}</span>
+      </div>
+      <div class="video-list-scroll">${listHtml}</div>`;
+  }
+
+  window.changeVideo = function(idx) {
+    currentVid = idx;
+    renderPlayer();
+    document.getElementById('modal-video').querySelector('.modal').scrollTop = 0;
+  };
+
+  renderPlayer();
+  openModal('modal-video');
+}
+
+// ═══════════════════════════════════════════════
+//  WALLET
+// ═══════════════════════════════════════════════
+async function loadWallet() {
+  const [balRes, trxRes] = await Promise.all([
+    api('GET','/api/wallet/balance'),
+    api('GET','/api/wallet/transactions?limit=30')
+  ]);
+  if(balRes.success) {
+    document.getElementById('wallet-balance').textContent='Rp '+(balRes.balance||0).toLocaleString('id-ID');
+    document.getElementById('wallet-update').textContent='Poin: '+(balRes.points||0).toLocaleString('id-ID')+' pts';
+    if(user){user.balance=balRes.balance;localStorage.setItem('zd_user',JSON.stringify(user));}
+    document.getElementById('home-balance').textContent='Rp '+(balRes.balance||0).toLocaleString('id-ID');
+  }
+  if(trxRes.success) {
+    const html=trxRes.transactions.map(t=>`
+      <div class="trx">
+        <div class="trx-ico" style="background:${t.type==='credit'?'#dcfce7':'#fee2e2'}">${t.type==='credit'?'💳':'💸'}</div>
+        <div class="trx-info">
+          <div class="trx-name">${t.description}</div>
+          <div class="trx-date">${formatDate(t.created_at)} · ${t.status||'berhasil'}</div>
+        </div>
+        <div class="trx-amt ${t.type==='credit'?'plus':'minus'}">${t.type==='credit'?'+':'-'}Rp ${t.amount.toLocaleString('id-ID')}</div>
+      </div>`).join('')||'<div style="padding:20px;color:var(--muted)">Belum ada transaksi</div>';
+    document.getElementById('wallet-trx').innerHTML=html;
+  }
+}
+function openTopup(){openModal('modal-topup');}
+function openTransfer(){openModal('modal-transfer');}
+function openWithdraw(){openModal('modal-withdraw');}
+
+async function doTopup() {
+  const amount=document.getElementById('topup-amount').value;
+  const method=document.getElementById('topup-method').value;
+  const res=await api('POST','/api/wallet/topup',{amount:Number(amount),payment_method:method});
+  if(res.success){
+    toast('💰 '+res.message);
+    user.balance=res.balance;
+    localStorage.setItem('zd_user',JSON.stringify(user));
+    document.getElementById('home-balance').textContent='Rp '+res.balance.toLocaleString('id-ID');
+    closeModal('modal-topup');
+    if(document.getElementById('s-wallet').classList.contains('active')) loadWallet();
+  } else toast('❌ '+res.message);
+}
+async function doTransfer() {
+  const email=document.getElementById('tf-email').value.trim();
+  const amount=Number(document.getElementById('tf-amount').value);
+  const note=document.getElementById('tf-note').value;
+  const res=await api('POST','/api/wallet/transfer',{to_email:email,amount,note});
+  if(res.success){
+    toast('✅ '+res.message);
+    user.balance=res.balance;
+    localStorage.setItem('zd_user',JSON.stringify(user));
+    document.getElementById('home-balance').textContent='Rp '+res.balance.toLocaleString('id-ID');
+    closeModal('modal-transfer');
+    if(document.getElementById('s-wallet').classList.contains('active')) loadWallet();
+  } else toast('❌ '+res.message);
+}
+async function doWithdraw() {
+  const amount=Number(document.getElementById('wd-amount').value);
+  const bank=document.getElementById('wd-bank').value;
+  const acc=document.getElementById('wd-acc').value;
+  const name=document.getElementById('wd-name').value;
+  const res=await api('POST','/api/wallet/withdraw',{amount,bank_name:bank,account_number:acc,account_name:name});
+  if(res.success){
+    toast('🏦 '+res.message);
+    user.balance=res.balance;
+    localStorage.setItem('zd_user',JSON.stringify(user));
+    closeModal('modal-withdraw');
+    if(document.getElementById('s-wallet').classList.contains('active')) loadWallet();
+  } else toast('❌ '+res.message);
+}
+
+// ═══════════════════════════════════════════════
+//  SHOP — BUKU dengan redirect Shopee/Tokopedia
+// ═══════════════════════════════════════════════
+function setShopPlatform(p) {
+  shopPlatform=p;
+  document.getElementById('ptab-shopee').className='ptab'+(p==='shopee'?' on shopee':'');
+  document.getElementById('ptab-tokped').className='ptab tokped'+(p==='tokped'?' on':'');
+  document.getElementById('ptab-both').className='ptab'+(p==='both'?' on':'');
+  renderBooks();
+}
+
+function filterBookCat(el, cat) {
+  bookCatFilter=cat;
+  document.querySelectorAll('#book-pills .pill').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  renderBooks();
+}
+
+function filterBooks() {
+  bookSearchQ=document.getElementById('book-search').value.toLowerCase();
+  renderBooks();
+}
+
+function getShopeeUrl(keyword) {
+  return `https://shopee.co.id/search?keyword=${encodeURIComponent(keyword)}`;
+}
+function getTokpedUrl(keyword) {
+  return `https://www.tokopedia.com/search?st=product&q=${encodeURIComponent(keyword)}`;
+}
+
+function renderBooks() {
+  let books=[...BOOKS];
+  if(bookCatFilter) books=books.filter(b=>b.subject===bookCatFilter);
+  if(bookSearchQ)   books=books.filter(b=>b.title.toLowerCase().includes(bookSearchQ)||b.subject.toLowerCase().includes(bookSearchQ));
+
+  const html=books.map(b=>{
+    let platBadge='';
+    let btnsHtml='';
+    if(shopPlatform==='shopee'||shopPlatform==='both') {
+      platBadge+='<span class="bcard-platform shopee">Shopee</span>';
+      btnsHtml+=`<button class="bbtn shopee" onclick="openBookDetail('${b.id}');event.stopPropagation()">🟠 Shopee</button>`;
+    }
+    if(shopPlatform==='tokped'||shopPlatform==='both') {
+      platBadge+=`<span class="bcard-platform tokped" style="right:${shopPlatform==='both'?'56px':'6px'}">Tokped</span>`;
+      btnsHtml+=`<button class="bbtn tokped" onclick="openBookDetail('${b.id}');event.stopPropagation()">🟢 Tokped</button>`;
+    }
+    return `
+      <div class="bcard" onclick="openBookDetail('${b.id}')">
+        <div class="bcard-img" style="background:${b.bg}">
+          <span style="font-size:44px">${b.emoji}</span>
+          ${platBadge}
+        </div>
+        <div class="bcard-body">
+          <div class="bcard-subject">${b.subject}</div>
+          <div class="bcard-title">${b.title}</div>
+          <div class="bcard-price">${b.price}</div>
+          <div class="bcard-btns">${btnsHtml}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('book-grid').innerHTML=html||'<div style="grid-column:span 2;padding:24px;text-align:center;color:var(--muted)">Buku tidak ditemukan</div>';
+}
+
+function openBookDetail(bookId) {
+  const b=BOOKS.find(x=>x.id===bookId);
+  if(!b)return;
+  const shopeeUrl=getShopeeUrl(b.keyword);
+  const tokpedUrl=getTokpedUrl(b.keyword);
+
+  const showShopee=shopPlatform==='shopee'||shopPlatform==='both';
+  const showTokped=shopPlatform==='tokped'||shopPlatform==='both';
+
+  document.getElementById('book-modal-content').innerHTML=`
+    <button class="modal-close" onclick="closeModal('modal-book')">✕</button>
+    <div class="book-detail-head">
+      <div class="book-detail-img" style="background:${b.bg}">${b.emoji}</div>
+      <div class="book-detail-info">
+        <div class="book-detail-title">${b.title}</div>
+        <div class="book-detail-subj">${b.subject}</div>
+        <div class="book-detail-price">${b.price}</div>
+        <div class="book-detail-stars">${b.stars} · ${b.sold.toLocaleString('id-ID')} terjual</div>
+      </div>
+    </div>
+    <div class="book-detail-desc">${b.desc}</div>
+    <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px">🛒 Beli di marketplace:</div>
+    <div class="book-platform-btns">
+      ${showShopee?`
+        <a href="${shopeeUrl}" target="_blank" rel="noopener noreferrer" class="bpbtn shopee">
+          🟠 Beli di Shopee
+          <span class="bpbtn-note">→ Cari "${b.keyword}"</span>
+        </a>`:''}
+      ${showTokped?`
+        <a href="${tokpedUrl}" target="_blank" rel="noopener noreferrer" class="bpbtn tokped">
+          🟢 Beli di Tokopedia
+          <span class="bpbtn-note">→ Cari "${b.keyword}"</span>
+        </a>`:''}
+      ${!showShopee&&!showTokped?'<div style="text-align:center;color:var(--muted);font-size:13px">Pilih platform di atas</div>':''}
+    </div>
+    <div style="margin-top:14px;padding:10px;background:var(--light);border-radius:10px;font-size:11px;color:var(--muted);text-align:center;line-height:1.5">
+      💡 Kamu akan diarahkan ke halaman pencarian marketplace.<br>Pilih penjual terpercaya dengan ⭐ rating tinggi.
+    </div>`;
+  openModal('modal-book');
+}
+
+// ═══════════════════════════════════════════════
+//  GAMES
+// ═══════════════════════════════════════════════
+async function loadGames() {
+  const [gamesRes,lbRes]=await Promise.all([api('GET','/api/games'),api('GET','/api/games/leaderboard?limit=4')]);
+  if(lbRes.success){
+    const medals=['🥇','🥈','🥉','4️⃣'];
+    document.getElementById('leaderboard-list').innerHTML=lbRes.leaderboard.map((r,i)=>`
+      <div class="lb-row">
+        <span class="lb-rank">${medals[i]||r.rank}</span>
+        <div class="lb-av">${r.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
+        <span class="lb-name">${r.name}</span>
+        <span class="lb-pts">${(r.total_points||0).toLocaleString('id-ID')} pts</span>
+      </div>`).join()||'<div style="color:rgba(255,255,255,.5);text-align:center;font-size:12px;padding:8px">Belum ada data</div>';
+  }
+  if(gamesRes.success){
+    const colors=['linear-gradient(135deg,#1d4ed8,#3b82f6)','linear-gradient(135deg,#065f46,#16a34a)','linear-gradient(135deg,#7c2d12,#ea580c)','linear-gradient(135deg,#4c1d95,#8b5cf6)'];
+    const catMap={math:'math',logic:'logic',language:'language'};
+    document.getElementById('game-cards').innerHTML=gamesRes.games.map((g,i)=>`
+      <div class="gc" style="background:${colors[i%4]}" onclick="startQuiz('${g.id}','${esc(g.name)}','${catMap[g.category]||'math'}')">
+        <div class="gc-badge">${g.live_players} main</div>
+        <div class="gc-ico">${['🔢','🎯','🔤','🧠'][i%4]}</div>
+        <div class="gc-name">${g.name}</div>
+        <div class="gc-desc">${g.description}</div>
+        <div class="gc-players">+${g.reward_points} poin/sesi</div>
+      </div>`).join('');
+  }
+}
+
+async function startQuiz(gameId,name,cat) {
+  const res=await api('GET',`/api/games/questions/${cat}`);
+  if(!res.success){toast('❌ Gagal memuat soal.');return;}
+  quizData={questions:res.questions,session_key:res.session_key};
+  quizAnswers=[];
+  quizStart=Date.now();
+  quizGameId=gameId;
+  renderQuiz(0);
+  openModal('modal-quiz');
+}
+
+function renderQuiz(idx) {
+  const q=quizData.questions[idx];
+  const total=quizData.questions.length;
+  document.getElementById('quiz-content').innerHTML=`
+    <button class="modal-close" onclick="closeModal('modal-quiz');clearInterval(quizTimer)">✕</button>
+    <div class="quiz-progress"><div class="quiz-prog-bar" style="width:${(idx/total)*100}%"></div></div>
+    <div class="quiz-timer">
+      <span style="font-size:13px;font-weight:700;color:var(--muted)">Soal ${idx+1}/${total}</span>
+      <div class="timer-bar"><div class="timer-fill" id="tfill" style="width:100%"></div></div>
+      <span style="font-size:13px;font-weight:800;color:var(--navy)" id="tsec">15</span>
+    </div>
+    <div class="quiz-q">${q.question}</div>
+    <div class="quiz-opts">${q.options.map(o=>`<button class="qopt" onclick="answerQuiz(${idx},'${esc(o)}')">${o}</button>`).join('')}</div>`;
+  let secs=15;
+  clearInterval(quizTimer);
+  quizTimer=setInterval(()=>{
+    secs--;
+    const fill=document.getElementById('tfill');
+    const tsec=document.getElementById('tsec');
+    if(fill)fill.style.width=(secs/15*100)+'%';
+    if(tsec)tsec.textContent=secs;
+    if(fill)fill.style.background=secs>5?'var(--green)':'#ef4444';
+    if(secs<=0){clearInterval(quizTimer);answerQuiz(idx,'',true);}
+  },1000);
+}
+
+async function answerQuiz(idx,answer,timeout=false) {
+  clearInterval(quizTimer);
+  quizAnswers.push(answer);
+  if(!timeout){
+    document.querySelectorAll('.qopt').forEach(b=>{b.disabled=true;if(b.textContent===answer)b.classList.add('correct');});
+    await sleep(600);
+  }
+  if(idx+1<quizData.questions.length){renderQuiz(idx+1);}
+  else {
+    const duration=Math.round((Date.now()-quizStart)/1000);
+    const res=await api('POST','/api/games/submit',{game_id:quizGameId,answers:quizAnswers,session_key:quizData.session_key,duration_seconds:duration});
+    if(res.success){
+      user.balance=res.balance; user.points=res.total_points;
+      localStorage.setItem('zd_user',JSON.stringify(user));
+      document.getElementById('home-balance').textContent='Rp '+res.balance.toLocaleString('id-ID');
+      document.getElementById('user-points').textContent=res.total_points.toLocaleString('id-ID');
+      showQuizResult(res);
+    } else toast('❌ '+res.message);
+  }
+}
+
+function showQuizResult(res) {
+  const emoji=res.score>=80?'🎉':res.score>=60?'👍':'📚';
+  document.getElementById('quiz-content').innerHTML=`
+    <div class="result-card">
+      <div style="font-size:32px;margin-bottom:6px">${emoji}</div>
+      <div class="result-score">${res.score}</div>
+      <div class="result-label">SKOR KAMU</div>
+      <div class="result-stats">
+        <div class="rstat"><div class="rstat-val">${res.correct}/${res.total}</div><div class="rstat-lbl">Benar</div></div>
+        <div class="rstat"><div class="rstat-val">+${res.points_earned}</div><div class="rstat-lbl">Poin</div></div>
+        <div class="rstat"><div class="rstat-val">${res.reward?'Rp '+(res.reward.amount/1000)+'rb':'-'}</div><div class="rstat-lbl">Reward</div></div>
+      </div>
+      ${res.reward?`<div style="background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.4);border-radius:10px;padding:10px;font-size:13px;font-weight:700;color:#86efac">🎁 Voucher Rp ${res.reward.amount.toLocaleString('id-ID')} ditambahkan!</div>`:''}
+    </div>
+    <button class="btn-primary" onclick="closeModal('modal-quiz');loadGames()">Tutup</button>`;
+}
+
+// ═══════════════════════════════════════════════
+//  TUTORS
+// ═══════════════════════════════════════════════
+async function loadTutors(subject='') {
+  document.getElementById('tutor-list').innerHTML='<div class="skeleton" style="height:140px;border-radius:16px;margin-bottom:10px"></div>'.repeat(3);
+  let url='/api/tutors?limit=20';
+  if(subject) url+=`&subject=${encodeURIComponent(subject)}`;
+  const res=await api('GET',url);
+  if(!res.success){toast('❌ Gagal memuat tutor.');return;}
+  const avBg=['#dbeafe','#dcfce7','#ede9fe','#fff7ed','#fce7f3'];
+  document.getElementById('tutor-list').innerHTML=res.tutors.map((t,i)=>`
+    <div class="tc">
+      <div class="tc-av" style="background:${avBg[i%avBg.length]}">${t.avatar||'👨‍🏫'}</div>
+      <div class="tc-info">
+        <div class="tc-name">${t.name}</div>
+        <div class="tc-subj">📖 ${t.subjects}</div>
+        <div class="tc-meta">
+          <span>⭐ ${t.rating}</span>
+          <span>👥 ${(t.total_students||0).toLocaleString('id-ID')}</span>
+          <span>📍 ${t.availability==='both'?'Online & Offline':t.availability==='online'?'Online':'Offline'}</span>
+        </div>
+        <div class="tc-rate">Rp ${(t.rate_per_hour||0).toLocaleString('id-ID')} / jam</div>
+        <div class="tc-btns">
+          <button class="tcb p" onclick="openBooking('${t.id}','${esc(t.name)}',${t.rate_per_hour})">Booking Sekarang</button>
+          <button class="tcb s" onclick="toast('💬 Chat dengan ${esc(t.name)}!')">Chat</button>
+        </div>
+      </div>
+    </div>`).join()||'<div style="padding:20px;color:var(--muted);text-align:center">Tutor tidak ditemukan</div>';
+}
+
+function filterTutor(el,subj) {
+  document.querySelectorAll('.tsp').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  loadTutors(subj);
+}
+
+function openBooking(tutorId,tutorName,rate) {
+  document.getElementById('booking-tutor-id').value=tutorId;
+  document.getElementById('booking-title').textContent=`Booking: ${tutorName}`;
+  document.getElementById('booking-sub').textContent=`Rp ${rate.toLocaleString('id-ID')} / jam`;
+  const tomorrow=new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+  const pad=n=>n.toString().padStart(2,'0');
+  const y=tomorrow.getFullYear(),m=pad(tomorrow.getMonth()+1),d=pad(tomorrow.getDate());
+  document.getElementById('bk-date').min=`${y}-${m}-${d}T08:00`;
+  document.getElementById('bk-date').value=`${y}-${m}-${d}T09:00`;
+  const updatePrice=()=>{
+    const dur=Number(document.getElementById('bk-dur').value);
+    document.getElementById('booking-price-preview').textContent=`💰 Total: Rp ${Math.ceil((dur/60)*rate).toLocaleString('id-ID')}`;
+  };
+  document.getElementById('bk-dur').onchange=updatePrice;
+  updatePrice();
+  openModal('modal-booking');
+}
+
+async function doBooking() {
+  const tutorId=document.getElementById('booking-tutor-id').value;
+  const subject=document.getElementById('bk-subject').value.trim();
+  const date=document.getElementById('bk-date').value;
+  const dur=Number(document.getElementById('bk-dur').value);
+  const mode=document.getElementById('bk-mode').value;
+  const note=document.getElementById('bk-note').value;
+  if(!subject){toast('⚠️ Isi mata pelajaran!');return;}
+  const res=await api('POST',`/api/tutors/${tutorId}/book`,{subject,scheduled_at:date,duration_minutes:dur,mode,notes:note});
+  if(res.success){
+    toast('📅 '+res.message);
+    user.balance=res.balance;
+    localStorage.setItem('zd_user',JSON.stringify(user));
+    document.getElementById('home-balance').textContent='Rp '+res.balance.toLocaleString('id-ID');
+    closeModal('modal-booking');
+    loadActivity();
+  } else toast('❌ '+res.message);
+}
+
+// ═══════════════════════════════════════════════
+//  NOTIFICATIONS
+// ═══════════════════════════════════════════════
+async function openNotifications() {
+  const res=await api('GET','/api/notifications?limit=15');
+  if(!res.success)return;
+  const typeEmoji={welcome:'🎉',transaction:'💰',course:'📚',achievement:'🏆',order:'🛒',booking:'📅',info:'ℹ️'};
+  document.getElementById('notif-list').innerHTML=res.notifications.map(n=>`
+    <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);opacity:${n.is_read?.6:1}">
+      <span style="font-size:20px">${typeEmoji[n.type]||'🔔'}</span>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:800">${n.title}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">${n.body||''}</div>
+        <div style="font-size:11px;color:var(--border);margin-top:3px">${formatDate(n.created_at)}</div>
+      </div>
+    </div>`).join()||'<div style="padding:16px;color:var(--muted);text-align:center">Tidak ada notifikasi</div>';
+  openModal('modal-notif');
+}
+
+async function markAllRead() {
+  await api('PUT','/api/notifications/read-all');
+  document.getElementById('notif-dot').style.display='none';
+  closeModal('modal-notif');
+  toast('✅ Semua notifikasi ditandai dibaca');
+}
+
+// ═══════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════
+function formatDate(dt) {
+  if(!dt)return'-';
+  const d=new Date(dt),now=new Date(),diff=Math.floor((now-d)/1000);
+  if(diff<60)return'Baru saja';
+  if(diff<3600)return Math.floor(diff/60)+' menit lalu';
+  if(diff<86400)return Math.floor(diff/3600)+' jam lalu';
+  if(diff<604800)return Math.floor(diff/86400)+' hari lalu';
+  return d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
+}
+function subjectBg(s){const m={Matematika:'#dbeafe',Fisika:'#dcfce7',Kimia:'#fae8ff',Biologi:'#ecfdf5',Bahasa:'#fff7ed','Bahasa Inggris':'#fff7ed',Teknologi:'#e0f2fe',IPS:'#fef3c7',Ekonomi:'#fef9c3'};return m[s]||'#f3f4f6';}
+function subjectColor(s){const m={Matematika:'#1d4ed8',Fisika:'#15803d',Kimia:'#86198f',Biologi:'#065f46',Bahasa:'#c2410c','Bahasa Inggris':'#c2410c',Teknologi:'#0369a1',IPS:'#b45309',Ekonomi:'#854d0e'};return m[s]||'#374151';}
+function subjectEmoji(s){const m={Matematika:'🔢',Fisika:'⚡',Kimia:'⚗️',Biologi:'🦠',Ekonomi:'💹','Bahasa Inggris':'🌐'};return m[s]||'📚';}
+function esc(s){return String(s).replace(/'/g,"&#39;").replace(/"/g,'&quot;');}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+// ═══════════════════════════════════════════════
+//  BOOT
+// ═══════════════════════════════════════════════
+
+(async()=>{
+  if(token){
+    const res=await api('GET','/api/auth/me');
+    if(res.success){user=res.user;localStorage.setItem('zd_user',JSON.stringify(user));enterApp();}
+    else{doLogout();}
+  }
+})();
+</script>
+</body>
+</html>
