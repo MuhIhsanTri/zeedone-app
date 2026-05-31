@@ -1028,7 +1028,7 @@ const BOOKS = [
 //  API HELPER
 // ═══════════════════════════════════════════════
 async function api(method, path, body) {
-  if (DEMO_MODE) return {success: false, message: 'Demo dinonaktifkan. Menyambung ke server asli.'};
+  if (DEMO_MODE) return { success: true, message: 'Berhasil (Aplikasi dalam Mode Demo)' };
   const opts = {
     method,
     headers: { 'Content-Type':'application/json', ...(token ? {Authorization:'Bearer '+token} : {}) },
