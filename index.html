@@ -1029,44 +1029,79 @@ const BOOKS = [
 ];
 
 // ═══════════════════════════════════════════════
-//  API HELPER & DEMO DATA
+//  API HELPER & DATA DEMO (VERCEL & ANTI-ERROR)
 // ═══════════════════════════════════════════════
-// Data tiruan ini mencegah aplikasi crash saat di-hosting di Vercel
 const DEMO_USER = { id:'demo1', name:'Ihsan Tricahyadi', email:'demo@zeedone.id', balance: 250000, points: 1500, stats:{unread_notifications:1} };
 
+const DEMO_TUTORS = [
+  { id: 't1', name: 'Budi Santoso', subjects: 'Matematika, Fisika', rating: 4.8, total_students: 120, availability: 'both', rate_per_hour: 50000, avatar: '👨‍🏫' },
+  { id: 't2', name: 'Siti Aminah', subjects: 'Bahasa Inggris', rating: 4.9, total_students: 200, availability: 'online', rate_per_hour: 40000, avatar: '👩‍🏫' },
+  { id: 't3', name: 'Dr. Hendra', subjects: 'Kimia', rating: 5.0, total_students: 85, availability: 'offline', rate_per_hour: 75000, avatar: '👨‍🔬' }
+];
+
+const DEMO_GAMES = [
+  { id: 'g1', name: 'Kuis Logika Cerdas', category: 'logic', live_players: 245, description: 'Asah logika dan pola pikir cepat', reward_points: 50 },
+  { id: 'g2', name: 'Tebak Istilah IT', category: 'language', live_players: 189, description: 'Sebesar apa pengetahuan teknologimu?', reward_points: 75 }
+];
+
+const DEMO_LEADERBOARD = [
+  { rank: 1, name: 'Alex Bhizer', total_points: 15400 },
+  { rank: 2, name: 'Sari M.', total_points: 14250 },
+  { rank: 3, name: 'Rudi H.', total_points: 13800 }
+];
+
 async function api(method, path, body) {
-  // 1. JIKA MODE DEMO (Berjalan di Vercel)
-  if (DEMO_MODE) {
-    await new Promise(r => setTimeout(r, 400)); // Memberikan efek loading natural
+  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  let useDemo = !isLocal; // Jika di Vercel, pasti pakai Demo
+
+  // 1. JIKA LOKAL: Coba panggil server.js & SQLite asli dulu
+  if (isLocal) {
+    try {
+      const opts = {
+        method,
+        headers: { 'Content-Type':'application/json', ...(token ? {Authorization:'Bearer '+token} : {}) },
+        ...(body ? {body:JSON.stringify(body)} : {})
+      };
+      const r = await fetch(API + path, opts);
+      const data = await r.json();
+      if (data) return data; 
+    } catch(e) {
+      // JIKA SERVER/DATABASE ERROR (Mati), jangan mogok! Beralih ke Demo
+      console.warn("Server backend mati/error. Beralih otomatis ke Mode Demo!");
+      useDemo = true;
+    }
+  }
+
+  // 2. JIKA DI VERCEL (ATAU SERVER LOKAL SEDANG MATI): Keluarkan semua data palsu
+  if (useDemo) {
+    await new Promise(r => setTimeout(r, 400)); // Beri efek loading natural
     
-    // Menyuplai data palsu agar layar Beranda & Profil sukses dimuat
-    if (path.includes('/login') || path.includes('/register')) return { success: true, token: 'demo_token', user: DEMO_USER };
+    // Auth & User
+    if (path.includes('/login') || path.includes('/register')) return { success: true, token: 'demo_token', user: DEMO_USER, message: 'Berhasil' };
     if (path.includes('/me')) return { success: true, user: DEMO_USER };
     if (path.includes('/balance')) return { success: true, balance: DEMO_USER.balance, points: DEMO_USER.points };
     
-    // Menyuplai array kosong agar fitur daftar/list tidak error
+    // Fitur Utama
+    if (path.includes('/tutors') && !path.includes('book')) return { success: true, tutors: DEMO_TUTORS };
+    if (path.includes('/games') && !path.includes('leaderboard') && !path.includes('questions') && !path.includes('submit')) return { success: true, games: DEMO_GAMES };
+    if (path.includes('leaderboard')) return { success: true, leaderboard: DEMO_LEADERBOARD };
     if (path.includes('/courses') && method === 'GET') return { success: true, courses: [] };
     if (path.includes('/transactions')) return { success: true, transactions: [] };
-    if (path.includes('/games') && !path.includes('leaderboard')) return { success: true, games: [] };
-    if (path.includes('leaderboard')) return { success: true, leaderboard: [] };
-    if (path.includes('/tutors')) return { success: true, tutors: [] };
     if (path.includes('/notifications')) return { success: true, notifications: [] };
     
-    // Merespons aksi klik tombol dengan simulasi sukses
+    // Simulasi Main Kuis (Minigames)
+    if (path.includes('/games/questions')) {
+      return { success: true, session_key: 'demo_session', questions: [
+        { question: 'Manakah dari ini yang merupakan bahasa pemrograman?', options: ['HTML', 'Python', 'CSS', 'JSON'], answer: 'Python' },
+        { question: 'Berapakah hasil dari 15 x 3?', options: ['35', '40', '45', '50'], answer: '45' }
+      ]};
+    }
+    if (path.includes('/games/submit')) {
+      return { success: true, message: 'Kuis Selesai!', score: 100, correct: 2, total: 2, points_earned: 50, balance: DEMO_USER.balance + 10000, total_points: DEMO_USER.points + 50, reward: {amount: 10000} };
+    }
+    
+    // Tombol sukses lainnya (Beli buku, Top up, dll)
     return { success: true, message: 'Berhasil (Aplikasi Mode Brosur)', balance: DEMO_USER.balance, new_balance: DEMO_USER.balance, total_points: DEMO_USER.points };
-  }
-
-  // 2. JIKA MODE LOKAL (Tersambung ke Node.js di Laptop)
-  const opts = {
-    method,
-    headers: { 'Content-Type':'application/json', ...(token ? {Authorization:'Bearer '+token} : {}) },
-    ...(body ? {body:JSON.stringify(body)} : {})
-  };
-  try {
-    const r = await fetch(API + path, opts);
-    return await r.json();
-  } catch(e) {
-    return { success:false, message:'Gagal terhubung ke peladen.' };
   }
 }
 
