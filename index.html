@@ -1029,7 +1029,7 @@ const BOOKS = [
 ];
 
 // ═══════════════════════════════════════════════
-//  API HELPER & DATA DEMO (VERCEL & ANTI-ERROR)
+//  API HELPER & DATA DEMO (SUPER KEBAL ERROR)
 // ═══════════════════════════════════════════════
 const DEMO_USER = { id:'demo1', name:'Ihsan Tricahyadi', email:'demo@zeedone.id', balance: 250000, points: 1500, stats:{unread_notifications:1} };
 
@@ -1050,12 +1050,18 @@ const DEMO_LEADERBOARD = [
   { rank: 3, name: 'Rudi H.', total_points: 13800 }
 ];
 
-async function api(method, path, body) {
-  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  let useDemo = !isLocal; // Jika di Vercel, pasti pakai Demo
+const DEMO_COURSES = [
+  { id: 'c1', title: 'Persiapan UTBK Matematika', subject: 'Matematika', price: 150000, rating: 4.9, total_students: 1250, is_enrolled: 0, thumbnail: '📐' },
+  { id: 'c2', title: 'Mastering Fisika Dasar', subject: 'Fisika', price: 200000, rating: 4.8, total_students: 980, is_enrolled: 1, my_progress: 40, thumbnail: '⚡' }
+];
 
-  // 1. JIKA LOKAL: Coba panggil server.js & SQLite asli dulu
-  if (isLocal) {
+async function api(method, path, body) {
+  // Cek apakah sedang dibuka di laptop
+  const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  let forceDemo = !isLocalHost; 
+
+  // 1. Coba pakai Node.js (KHUSUS LOKAL)
+  if (isLocalHost) {
     try {
       const opts = {
         method,
@@ -1064,28 +1070,37 @@ async function api(method, path, body) {
       };
       const r = await fetch(API + path, opts);
       const data = await r.json();
-      if (data) return data; 
+      
+      // JIKA SERVER MENJAWAB SUKSES, gunakan datanya!
+      if (data && data.success) return data;
+      
+      // JIKA SERVER MENJAWAB GAGAL (misal: belum daftar / database kosong)
+      // Kita PAKSA aplikasi memuat data Demo agar tetap bisa masuk ke Beranda!
+      console.warn("Backend menolak (DB kosong). Memaksa masuk ke Mode Demo!");
+      forceDemo = true;
     } catch(e) {
-      // JIKA SERVER/DATABASE ERROR (Mati), jangan mogok! Beralih ke Demo
-      console.warn("Server backend mati/error. Beralih otomatis ke Mode Demo!");
-      useDemo = true;
+      // JIKA SERVER MATI TOTAL
+      console.warn("Server mati. Beralih ke Mode Demo!");
+      forceDemo = true;
     }
   }
 
-  // 2. JIKA DI VERCEL (ATAU SERVER LOKAL SEDANG MATI): Keluarkan semua data palsu
-  if (useDemo) {
-    await new Promise(r => setTimeout(r, 400)); // Beri efek loading natural
+  // 2. DATA DEMO OTOMATIS (UNTUK VERCEL & LOKAL YANG BERMASALAH)
+  if (forceDemo) {
+    await new Promise(r => setTimeout(r, 400)); // Efek loading natural
     
-    // Auth & User
-    if (path.includes('/login') || path.includes('/register')) return { success: true, token: 'demo_token', user: DEMO_USER, message: 'Berhasil' };
+    // Autentikasi
+    if (path.includes('/login') || path.includes('/register')) return { success: true, token: 'demo_token', user: DEMO_USER, message: 'Berhasil masuk!' };
     if (path.includes('/me')) return { success: true, user: DEMO_USER };
     if (path.includes('/balance')) return { success: true, balance: DEMO_USER.balance, points: DEMO_USER.points };
     
-    // Fitur Utama
+    // Data Fitur (Guru, Games, Kursus)
     if (path.includes('/tutors') && !path.includes('book')) return { success: true, tutors: DEMO_TUTORS };
     if (path.includes('/games') && !path.includes('leaderboard') && !path.includes('questions') && !path.includes('submit')) return { success: true, games: DEMO_GAMES };
     if (path.includes('leaderboard')) return { success: true, leaderboard: DEMO_LEADERBOARD };
-    if (path.includes('/courses') && method === 'GET') return { success: true, courses: [] };
+    if (path.includes('/courses') && method === 'GET') return { success: true, courses: DEMO_COURSES };
+    
+    // Data Kosong agar fitur riwayat tidak error
     if (path.includes('/transactions')) return { success: true, transactions: [] };
     if (path.includes('/notifications')) return { success: true, notifications: [] };
     
@@ -1100,8 +1115,8 @@ async function api(method, path, body) {
       return { success: true, message: 'Kuis Selesai!', score: 100, correct: 2, total: 2, points_earned: 50, balance: DEMO_USER.balance + 10000, total_points: DEMO_USER.points + 50, reward: {amount: 10000} };
     }
     
-    // Tombol sukses lainnya (Beli buku, Top up, dll)
-    return { success: true, message: 'Berhasil (Aplikasi Mode Brosur)', balance: DEMO_USER.balance, new_balance: DEMO_USER.balance, total_points: DEMO_USER.points };
+    // Respons aksi tombol biasa (Beli, Booking Tutor, Top up)
+    return { success: true, message: 'Berhasil (Aplikasi Mode Demo)', balance: DEMO_USER.balance, new_balance: DEMO_USER.balance, total_points: DEMO_USER.points };
   }
 }
 
