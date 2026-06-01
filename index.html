@@ -696,9 +696,13 @@ html,body{height:100%;font-family:var(--fb);background:#cbd5e1;color:var(--text)
 <script>
 // ═══════════════════════════════════════════════
 //  STATE
-// ═══════════════════════════════════════════════
+// ═════════════════  ══════════════════════════════
 const API = ''; // Biarkan kosong agar otomatis menyambung ke localhost backend Anda
-const DEMO_MODE = true; // HARUS FALSE agar menyambung ke server Node.js sungguhan
+// Kode ini akan mengecek apakah web dibuka di laptop (localhost)
+const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+// Jika dibuka di laptop, matikan DEMO (false). Jika di Vercel, nyalakan DEMO (true).
+const DEMO_MODE = !isLocal;
 
 let token = localStorage.getItem('zd_token') || '';
 let user = JSON.parse(localStorage.getItem('zd_user') || 'null');
